@@ -3,3 +3,5 @@
 /frontend/build/
 /lambda/.aws-sam/
 /lambda/.serverless/
+/*/.eslintcache
+.idea
