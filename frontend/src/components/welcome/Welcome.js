@@ -2,6 +2,7 @@ import React from "react";
 import {Button, Grid, Typography} from "@material-ui/core";
 import Background from "../background/Background";
 import team from "../../resources/images/2k20.png";
+import { withAuth0 } from "@auth0/auth0-react";
 
 const styles = {
     mainImage: {
@@ -26,14 +27,25 @@ class Welcome extends React.Component {
     }
 
     generateToolbarContent() {
+        const { loginWithRedirect } = this.props.auth0;
         return (
             <div style={styles.login}>
-                <Button size={"large"} variant={"contained"} style={styles.login}> Log in</Button>
+                <Button size={"large"} variant={"contained"} style={styles.login} onClick={() => loginWithRedirect()}> Log in</Button>
             </div>
         );
     }
 
     generateContent() {
+        const { user, isAuthenticated } = this.props.auth0;
+        if (isAuthenticated) {
+            console.log(user)
+            return (<div>
+                <img src={user.picture} alt={user.name} />
+                <h2>{user.name}</h2>
+                <p>{user.email}</p>
+              </div>
+        )
+        }
         return (
             <Grid container alignItems={"center"} justify={"center"}>
                 <Grid item xs={12} spacing={10}>
@@ -61,4 +73,4 @@ class Welcome extends React.Component {
 }
 
 
-export default Welcome;
+export default withAuth0(Welcome);
