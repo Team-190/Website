@@ -18,16 +18,14 @@ class Welcome extends React.Component {
         xmlhttp.responseType = "json";
         xmlhttp.onloadend = () => {
             console.log("Response: " + JSON.stringify(xmlhttp.response));
-            // if (xmlhttp.response.statusCode === 200) {
             document.getElementById("test").innerText = xmlhttp.response.message;
-            // }
         }
         xmlhttp.send(JSON.stringify({name: "grant"}));
     }
 
     generateToolbarContent() {
         return (
-            <Button size={"large"} variant={"contained"} style={styles.login}> Log in</Button>
+            <Button variant={"contained"}> Log in</Button>
         );
     }
 

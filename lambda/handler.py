@@ -1,11 +1,14 @@
 import json
-
+import logging
 
 def hello(event, context):
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
     body = {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
+        "message": event["body"]["name"],
         "input": event
     }
+    logging.info(f'event: {event}')
 
     response = {
         "statusCode": 200,
@@ -24,5 +27,4 @@ def hello(event, context):
     """
 
 if __name__ == "__main__":
-
     hello('', '')
