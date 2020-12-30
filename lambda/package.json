@@ -1,0 +1,22 @@
+{
+  "name": "team190-website",
+  "version": "1.0.0",
+  "description": "The backend for FRC Team 190's website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team-190/Website.git"
+  },
+  "author": "Grant Perkins and Kevin O'Brien",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team-190/Website/issues"
+  },
+  "homepage": "https://github.com/Team-190/Website#readme",
+  "dependencies": {
+    "serverless-python-requirements": "^5.1.0"
+  }
+}
