@@ -5,6 +5,7 @@ import {createMuiTheme, CssBaseline} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
 
 import Welcome from "./components/welcome/Welcome";
+import StudentView from "./components/student/StudentView";
 
 const theme = createMuiTheme({
     palette: {
@@ -24,6 +25,9 @@ function App() {
           <CssBaseline/>
           <HashRouter>
               <Switch>
+                  <Route path={"/student"}>
+                      <StudentView/>
+                  </Route>
                   <Route path={"/"}>
                       <Welcome/>
                   </Route>

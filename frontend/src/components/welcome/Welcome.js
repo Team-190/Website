@@ -1,15 +1,15 @@
 import React from "react";
-import {Button, Card, CardMedia, Grid, Typography} from "@material-ui/core";
+import {Button, Grid, Typography} from "@material-ui/core";
 import Background from "../background/Background";
-import team from "../../resources/images/2k19.png";
+import team from "../../resources/images/2k20.png";
 
 const styles = {
     mainImage: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
+        width: "75%",
+        paddingTop: "10%"
     }
 }
-A
+
 class Welcome extends React.Component {
     componentDidMount() {
         // const api_url = "https://nwnofhzw04.execute-api.us-east-1.amazonaws.com/production/hello";
@@ -27,33 +27,34 @@ class Welcome extends React.Component {
 
     generateToolbarContent() {
         return (
-            <div>
-                <Grid item>
-                    <Button variant={"contained"}> Log in</Button>
-                </Grid>
+            <div style={styles.login}>
+                <Button size={"large"} variant={"contained"} style={styles.login}> Log in</Button>
             </div>
         );
     }
 
     generateContent() {
         return (
-            <div>
-                <Typography variant={"h1"} id={"test"}> Test </Typography>
-                <Card>
-                    <CardMedia style={styles.mainImage}
-                               image={team}
-                               title={"2019 Team"}/>
-                </Card>
-            </div>
+            <Grid container alignItems={"center"} justify={"center"}>
+                <Grid item xs={12} spacing={10}>
+                    <Typography variant={"h2"} id={"test"}> Welcome to FRC Team 190's website! </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                    <Typography variant={"h4"}> Please log in with your Slack account to view your records, register for
+                        events, and vote. </Typography>
+                    <Button size={"large"} variant={"contained"} color={"primary"}> Log in</Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <img style={styles.mainImage} src={team} alt={"2020 team"}/>
+                </Grid>
+            </Grid>
         );
     }
 
     render() {
         return (
             <Background
-                toolbarContent={
-                    this.generateToolbarContent()
-                }
+                toolbarContent={this.generateToolbarContent()}
                 content={this.generateContent()}/>
         );
     }
