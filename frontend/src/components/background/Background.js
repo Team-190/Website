@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import {AppBar, Toolbar, Typography} from "@material-ui/core";
 
 const styles = {
@@ -18,7 +18,7 @@ const styles = {
     }
 }
 
-class Background extends Component {
+class Background extends React.Component {
     render() {
         return (
             <div className={"BackgroundContainer"}>
