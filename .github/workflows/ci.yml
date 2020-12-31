@@ -28,10 +28,10 @@ jobs:
               with:
                 node-version: '14'
             - name: Install Serverless plugins
-              run: npm install
+              run: yarn install
               working-directory: ./lambda
             - name: Deploy to Lambda
-              run: npm deploy
+              run: yarn deploy
               working-directory: ./lambda
               env:
                 AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
