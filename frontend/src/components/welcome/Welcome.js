@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Grid, Typography} from "@material-ui/core";
-import Background from "../background/Background";
+import Background from "../utility/Background";
 import team from "../../resources/images/2k20.png";
 import {withAuth0} from "@auth0/auth0-react";
 
@@ -32,7 +32,6 @@ class Welcome extends React.Component {
             xmlhttp.responseType = "json";
             xmlhttp.onloadend = () => {
                 console.log("Response: " + JSON.stringify(xmlhttp.response));
-                console.log(xmlhttp.status);
                 if (xmlhttp.status === 201) {
                     // Must choose role
                     window.location.href = "#/choose";
@@ -41,6 +40,7 @@ class Welcome extends React.Component {
                     let role = xmlhttp.response["message"];
                     if (role === "ubermentor") {
                         // redirect to /ubermentor
+                        window.location.href = "#/uber"
                     } else {
                         // redirect to /student
                         window.location.href = "#/student";

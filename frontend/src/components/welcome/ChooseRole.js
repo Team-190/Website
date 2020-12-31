@@ -1,6 +1,6 @@
 import React from "react";
 import {withAuth0} from "@auth0/auth0-react";
-import Background from "../background/Background";
+import Background from "../utility/Background";
 import {Button, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, Typography} from "@material-ui/core";
 
 const styles = {
@@ -35,6 +35,7 @@ class ChooseRole extends React.Component {
                         let role = xmlhttp.response["message"];
                         if (role === "ubermentor") {
                             // redirect to /ubermentor
+                            window.location.href = "#/uber";
                         } else {
                             // redirect to /student
                             window.location.href = "#/student";

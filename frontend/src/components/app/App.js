@@ -4,10 +4,11 @@ import {HashRouter, Route, Switch} from "react-router-dom";
 import {createMuiTheme, CssBaseline} from "@material-ui/core";
 import {ThemeProvider} from "@material-ui/styles";
 
-import Welcome from "./components/welcome/Welcome";
-import StudentView from "./components/student/StudentView";
-import ChooseRole from "./components/welcome/ChooseRole";
-import Requirements from "./components/student/Requirements";
+import Welcome from "../welcome/Welcome";
+import StudentView from "../student/StudentView";
+import ChooseRole from "../welcome/ChooseRole";
+import Requirements from "../student/Requirements";
+import UberView from "../ubermentor/UberView";
 
 const theme = createMuiTheme({
     palette: {
@@ -27,6 +28,9 @@ function App() {
                 <CssBaseline/>
                 <HashRouter>
                     <Switch>
+                        <Route path={"/uber"}>
+                            <UberView/>
+                        </Route>
                         <Route path={"/student"}>
                             <StudentView/>
                         </Route>

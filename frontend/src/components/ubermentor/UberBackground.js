@@ -3,12 +3,12 @@ import Background from "../utility/Background";
 import {Button, Grid} from "@material-ui/core";
 import {Link} from "react-router-dom";
 
-class StudentBackground extends React.Component {
+class UberBackground extends React.Component {
     generateToolbarContent() {
         return (
             <Grid container spacing={4}>
                 <Grid item>
-                    <Link to={"/student"}>
+                    <Link to={"/uber"}>
                         <Button variant={"contained"}> Home </Button>
                     </Link>
                 </Grid>
@@ -19,12 +19,10 @@ class StudentBackground extends React.Component {
                     <Button variant={"contained"}> Requests </Button>
                 </Grid>
                 <Grid item>
-                    <Link to={"/requirements"}>
-                        <Button variant={"contained"}> Travel Team Requirements </Button>
-                    </Link>
+                    <Button variant={"contained"}> Users </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"}> Voting </Button>
+                    <Button variant={"contained"}> Manage Site </Button>
                 </Grid>
             </Grid>
         );
@@ -37,4 +35,4 @@ class StudentBackground extends React.Component {
     }
 }
 
-export default StudentBackground;
+export default UberBackground;

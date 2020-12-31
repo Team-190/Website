@@ -20,7 +20,6 @@ const styles = {
 }
 
 class StudentView extends React.Component {
-
     tables = [
         <EventTable title={"Upcoming Events"} secondaryTitle={"Date"} rows={[]}/>,
         <EventTable title={"Your Events"} secondaryTitle={"Date"} rows={[]}/>,
