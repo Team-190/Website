@@ -1,11 +1,12 @@
 import json
 import logging
 
+
 def hello(event, context):
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     body = {
-        "message": event["body"]["name"],
+        "message": json.loads(event["body"])["name"],
         "input": event
     }
     logging.info(f'event: {event}')
@@ -17,14 +18,6 @@ def hello(event, context):
 
     return response
 
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """
 
 if __name__ == "__main__":
     hello('', '')
