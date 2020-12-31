@@ -55,7 +55,7 @@ class StudentView extends React.Component {
 
     generateContent() {
         return (
-            <Grid container style={styles.tables}>
+            <Grid container spacing={3}>
                 <Grid item xs={4} style={{width:"100%"}}>
                     <Typography variant={"h4"}> Requirements for travel team </Typography>
                 </Grid>
