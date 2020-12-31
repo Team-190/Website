@@ -1,5 +1,10 @@
 import React from "react";
-import {pdfjs, Document, Page} from "react-pdf";
+import {Document, Page, pdfjs} from "react-pdf";
+import Background from "../background/Background";
+import {Button, Grid} from "@material-ui/core";
+import {Link} from "react-router-dom";
+import StudentBackground from "./StudentBackground";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const options = {
@@ -8,8 +13,10 @@ const options = {
 };
 
 const styles = {
-    document : {
-        width:"100%"
+    document: {
+        width: "100%",
+        display: "flex",
+        justifyContent: "center"
     }
 }
 
@@ -24,26 +31,31 @@ class Requirements extends React.Component {
     }
 
     onDocumentLoadSuccess({numPages}) {
-        this.setState( {numPages: numPages});
+        this.setState({numPages: numPages});
     }
 
     render() {
         return (
-            <div style={styles.document}>
-                <Document file={"https://190website-images.s3.amazonaws.com/Travel+Team_Active+Team+Requirements.pdf"}
-                          onLoadSuccess={this.onDocumentLoadSuccess} options={options}>
-                    {Array.from(
-                        new Array(this.state.numPages),
-                        (el, index) => (
-                            <Page
-                                width = {document.getElementById('root').clientWidth*98/300}
-                                key={`page_${index + 1}`}
-                                pageNumber={index + 1}
-                            />
-                        ),
-                    )}
-                </Document>
-            </div>
+            <StudentBackground content={
+                <Grid container justify={"center"}>
+                    <div style={styles.document}>
+                        <Document
+                            file={"https://190website-images.s3.amazonaws.com/Travel+Team_Active+Team+Requirements.pdf"}
+                            onLoadSuccess={this.onDocumentLoadSuccess} options={options}>
+                            {Array.from(
+                                new Array(this.state.numPages),
+                                (el, index) => (
+                                    <Page
+                                        width={document.getElementById('root').clientWidth * 98 / 300}
+                                        key={`page_${index + 1}`}
+                                        pageNumber={index + 1}
+                                    />
+                                ),
+                            )}
+                        </Document>
+                    </div>
+                </Grid>
+            }/>
         );
     }
 }

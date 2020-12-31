@@ -1,6 +1,6 @@
 import React from "react";
 import Background from "../background/Background";
-import {Button, Card, CardContent, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardContent, Grid, Paper, Tab, Tabs, Typography} from "@material-ui/core";
 import EventTable from "../utility/EventTable";
 import HoursTable from "../utility/HoursTable";
 import RequestHours from "./RequestHours";
@@ -9,6 +9,9 @@ import RequestEvent from "./RequestEvent";
 import Requirements from "./Requirements";
 import RequestMeeting from "./RequestMeeting";
 import RequestSupport from "./RequestSupport";
+import TabPanel from "../utility/TabPanel";
+import {Link} from "react-router-dom";
+import StudentBackground from "./StudentBackground";
 
 const styles = {
     tables: {
@@ -30,24 +33,16 @@ class StudentView extends React.Component {
         <HoursTable title={"Support Tasks"} rows={[]}/>,
     ];
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            tab: 0
+        }
+        this.handleChange = this.handleChange.bind(this);
+    }
 
-    generateToolbarContent() {
-        return (
-            <Grid container spacing={4}>
-                <Grid item>
-                    <Button variant={"contained"}> Slack </Button>
-                </Grid>
-                <Grid item>
-                    <Button variant={"contained"}> Requests </Button>
-                </Grid>
-                <Grid item>
-                    <Button variant={"contained"}> Travel Team Requirements </Button>
-                </Grid>
-                <Grid item>
-                    <Button variant={"contained"}> Voting </Button>
-                </Grid>
-            </Grid>
-        );
+    handleChange(event, value) {
+        this.setState({tab: value})
     }
 
     generateContent() {
@@ -74,17 +69,25 @@ class StudentView extends React.Component {
                         <Grid item xs={12}>
                             <Typography variant={"h4"}> Request approvals </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                            <RequestMeeting/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <RequestHours/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <RequestEvent/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <RequestSupport/>
+                        <Grid item xs={12}>
+                            <Paper>
+                                <Tabs
+                                    value={this.state.tab}
+                                    onChange={this.handleChange}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    centered
+                                >
+                                    <Tab label="Weekly Meetings" />
+                                    <Tab label="Hours" />
+                                    <Tab label="Events" />
+                                    <Tab label={"Support"}/>
+                                </Tabs>
+                                <TabPanel value={this.state.tab} index={0} content={<RequestMeeting/>}/>
+                                <TabPanel value={this.state.tab} index={1} content={<RequestHours/>}/>
+                                <TabPanel value={this.state.tab} index={2} content={<RequestEvent/>}/>
+                                <TabPanel value={this.state.tab} index={3} content={<RequestSupport/>}/>
+                            </Paper>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -100,7 +103,7 @@ class StudentView extends React.Component {
 
     render() {
         return (
-            <Background toolbarContent={this.generateToolbarContent()} content={this.generateContent()}/>
+            <StudentBackground content={this.generateContent()}/>
         );
     }
 }
