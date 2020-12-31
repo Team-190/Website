@@ -27,11 +27,11 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                 node-version: '14'
-            - name: Install Serverless
+            - name: Install Serverless plugins
               run: npm install
               working-directory: ./lambda
             - name: Deploy to Lambda
-              run: serverless deploy
+              run: npm deploy
               working-directory: ./lambda
               env:
                 AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
