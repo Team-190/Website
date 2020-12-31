@@ -28,7 +28,8 @@ jobs:
               with:
                 node-version: '14'
             - name: Install Serverless
-              run: npm i -g serverless@2.1.0
+              run: npm install
+              working-directory: ./lambda
             - name: Deploy to Lambda
               run: serverless deploy
               working-directory: ./lambda
