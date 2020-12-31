@@ -33,6 +33,26 @@ class StudentView extends React.Component {
         <FRCTable title={"Votes"} secondaryTitle={"Date"} rows={[]}/>
     ];
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            hoursSelected: "",
+            hoursError: true,
+            weekSelected: "",
+            weekError: true
+        }
+        this.handleWeekChange = this.handleWeekChange.bind(this);
+        this.handleHourChange = this.handleHourChange.bind(this);
+    }
+
+    handleHourChange(event) {
+        this.setState({ hoursSelected: event.target.value, hoursError: !event.target.value});
+    }
+
+    handleWeekChange(event) {
+        this.setState({ weekSelected: event.target.value, weekError: !event.target.value});
+    }
+
     generateToolbarContent() {
         return (
 
@@ -56,7 +76,7 @@ class StudentView extends React.Component {
     generateContent() {
         return (
             <Grid container spacing={3}>
-                <Grid item xs={4} style={{width:"100%"}}>
+                <Grid item xs={4} style={{width: "100%"}}>
                     <Typography variant={"h4"}> Requirements for travel team </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -64,11 +84,11 @@ class StudentView extends React.Component {
                         <Grid item xs={12}>
                             <Typography variant={"h4"}> Your data </Typography>
                         </Grid>
-                        {this.tables.map((row) => {
+                        {this.tables.map((table,index) => {
                             return (
-                                <Grid item xs={12}>
+                                <Grid item xs={12} key={index}>
                                     <Card>
-                                        <CardContent>{row}</CardContent>
+                                        <CardContent>{table}</CardContent>
                                     </Card>
                                 </Grid>
                             )
@@ -90,7 +110,7 @@ class StudentView extends React.Component {
                                         <FormControl style={styles.formControl}>
                                             <InputLabel id={"studentApprovalHourLabel"}> Type of hours </InputLabel>
                                             <Select required labelId={"studentApprovalHourLabel"}
-                                                    id={"studentApprovalHourType"}>
+                                                    id={"studentApprovalHourType"} onChange={this.handleHourChange} value={this.state.hoursSelected}>
                                                 <MenuItem value={"Support"}>Support</MenuItem>
                                                 <MenuItem value={"Operations"}>Operations</MenuItem>
                                             </Select>
@@ -98,14 +118,14 @@ class StudentView extends React.Component {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <FormControl style={styles.formControl}>
-                                            <TextField required type={"number"} id={"hoursWorked"} placeholder={0}/>
+                                            <TextField required type={"number"} id={"hoursWorked"} placeholder={"0"}/>
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <FormControl style={styles.formControl}>
                                             <InputLabel id={"studentApprovalWeekLabel"}> Week earned </InputLabel>
                                             <Select required labelId={"studentApprovalWeekLabel"}
-                                                    id={"studentApprovalWeek"}>
+                                                    id={"studentApprovalWeek"} onChange={this.handleWeekChange} value={this.state.weekSelected}>
                                                 {[0, 1, 2, 3, 4, 5, 6].map((value) => {
                                                     return (
                                                         <MenuItem key={value} value={value}>Week {value}</MenuItem>

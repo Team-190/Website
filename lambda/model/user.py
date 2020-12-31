@@ -2,7 +2,10 @@
 class User:
     def __init__(self, user_dict):
         self.email = user_dict["email"]
-        self.name = user_dict["name"]
+        try:
+            self.name = user_dict["name"]
+        except KeyError:
+            self.name = user_dict["member_name"]
         try:
             self.picture = user_dict["https://first.wpi.edu/slack_avatar"]
         except KeyError:
@@ -13,4 +16,16 @@ class User:
         try:
             self.role = user_dict["role"]
         except KeyError:
-            self.role = None
+            try:
+                self.role = user_dict["member_role"]
+            except KeyError:
+                self.role = None
+
+    def to_json(self, role=None):
+        self.role = self.role if role is None else role
+        return {
+            "email": self.email,
+            "member_role": self.role,
+            "member_name": self.name,
+            "picture": self.picture
+        }
