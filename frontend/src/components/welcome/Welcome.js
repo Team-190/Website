@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Grid, Typography} from "@material-ui/core";
 import Background from "../background/Background";
 import team from "../../resources/images/2k20.png";
-import { withAuth0 } from "@auth0/auth0-react";
+import {withAuth0} from "@auth0/auth0-react";
 
 const styles = {
     mainImage: {
@@ -13,36 +13,43 @@ const styles = {
 
 class Welcome extends React.Component {
     componentDidMount() {
-        const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/hello";
-        let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-        xmlhttp.open("POST", api_url, true);
-        xmlhttp.responseType = "json";
-        xmlhttp.onloadend = () => {
-            console.log("Response: " + JSON.stringify(xmlhttp.response));
-            document.getElementById("test").innerText = xmlhttp.response.message;
-        }
-        xmlhttp.send(JSON.stringify({name: "grant"}));
+        // const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/hello";
+        // let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+        // xmlhttp.open("POST", api_url, true);
+        // xmlhttp.responseType = "json";
+        // xmlhttp.onloadend = () => {
+        //     console.log("Response: " + JSON.stringify(xmlhttp.response));
+        //     document.getElementById("test").innerText = xmlhttp.response.message;
+        // }
+        // xmlhttp.send(JSON.stringify({name: "grant"}));
+        const {getAccessTokenSilently} = this.props.auth0;
+        getAccessTokenSilently({audience:"team190"}).then(token => {
+            console.log("Token: "+token);
+
+        });
     }
 
+
     generateToolbarContent() {
-        const { loginWithRedirect } = this.props.auth0;
+        const {loginWithRedirect} = this.props.auth0;
         return (
             <div style={styles.login}>
-                <Button size={"large"} variant={"contained"} style={styles.login} onClick={() => loginWithRedirect()}> Log in</Button>
+                <Button size={"large"} variant={"contained"} style={styles.login}
+                        onClick={() => loginWithRedirect()}> Log in</Button>
             </div>
         );
     }
 
     generateContent() {
-        const { user, isAuthenticated } = this.props.auth0;
+        const {user, isAuthenticated} = this.props.auth0;
         if (isAuthenticated) {
             console.log(user)
             return (<div>
-                <img src={user.picture} alt={user.name} />
-                <h2>{user.name}</h2>
-                <p>{user.email}</p>
-              </div>
-        )
+                    <img src={user.picture} alt={user.name}/>
+                    <h2>{user.name}</h2>
+                    <p>{user.email}</p>
+                </div>
+            )
         }
         return (
             <Grid container alignItems={"center"} justify={"center"}>
