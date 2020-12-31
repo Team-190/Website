@@ -12,20 +12,31 @@ const styles = {
 }
 
 class Welcome extends React.Component {
-    componentDidMount() {
-        // const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/hello";
-        // let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-        // xmlhttp.open("POST", api_url, true);
-        // xmlhttp.responseType = "json";
-        // xmlhttp.onloadend = () => {
-        //     console.log("Response: " + JSON.stringify(xmlhttp.response));
-        //     document.getElementById("test").innerText = xmlhttp.response.message;
-        // }
-        // xmlhttp.send(JSON.stringify({name: "grant"}));
-        const {getAccessTokenSilently} = this.props.auth0;
-        getAccessTokenSilently({audience:"team190"}).then(token => {
-            console.log("Token: "+token);
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const {isAuthenticated} = this.props.auth0;
+        if (isAuthenticated) {
+            this.handleLogin();
+        } else {
+            console.log("No authentication.")
+        }
+    }
+
+
+    handleLogin() {
+        console.log("handleLogin");
+        const {getAccessTokenWithPopup} = this.props.auth0;
+        getAccessTokenWithPopup({audience: "team190", scopes: "openid profile email"}).then((token) => {
+            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/login";
+            let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("GET", api_url, true);
+            xmlhttp.responseType = "json";
+            xmlhttp.onloadend = () => {
+                console.log("Response: " + JSON.stringify(xmlhttp.response));
+                // 
+            }
+            xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+            xmlhttp.send();
         });
     }
 
@@ -33,24 +44,11 @@ class Welcome extends React.Component {
     generateToolbarContent() {
         const {loginWithRedirect} = this.props.auth0;
         return (
-            <div style={styles.login}>
-                <Button size={"large"} variant={"contained"} style={styles.login}
-                        onClick={() => loginWithRedirect()}> Log in</Button>
-            </div>
+            <Button variant={"contained"} onClick={() => loginWithRedirect()}> Log in</Button>
         );
     }
 
     generateContent() {
-        const {user, isAuthenticated} = this.props.auth0;
-        if (isAuthenticated) {
-            console.log(user)
-            return (<div>
-                    <img src={user.picture} alt={user.name}/>
-                    <h2>{user.name}</h2>
-                    <p>{user.email}</p>
-                </div>
-            )
-        }
         return (
             <Grid container alignItems={"center"} justify={"center"}>
                 <Grid item xs={12}>
@@ -70,9 +68,7 @@ class Welcome extends React.Component {
 
     render() {
         return (
-            <Background
-                toolbarContent={this.generateToolbarContent()}
-                content={this.generateContent()}/>
+            <Background toolbarContent={this.generateToolbarContent()} content={this.generateContent()}/>
         );
     }
 }

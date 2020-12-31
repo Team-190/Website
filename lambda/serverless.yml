@@ -23,7 +23,16 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: python3.8
-
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
 plugins:
   - serverless-python-requirements
 
@@ -35,27 +44,6 @@ custom:
   # you can overwrite defaults here
   #  stage: dev
   #  region: us-east-1
-
-  # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "logs:CreateLogStream"
-#        - "logs:PutLogEvents"
-#      Resource: "*"
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join": [ "", [ "arn:aws:s3:::", { "Ref": "ServerlessDeploymentBucket" } ] ] }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref": "ServerlessDeploymentBucket"
-#            - "/*"
 
 # you can define service wide environment variables here
 #  environment:
@@ -72,9 +60,9 @@ custom:
 
 functions:
   hello:
-    handler: handler.hello
+    handler: handler/handler.hello
   login:
-    handler: handler.login
+    handler: handler/handler.login
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
