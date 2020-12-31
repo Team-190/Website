@@ -69,9 +69,15 @@ class Welcome extends React.Component {
                     <Typography variant={"h2"} id={"test"}> Welcome to FRC Team 190's website! </Typography>
                 </Grid>
                 <Grid item xs={3}>
-                    <Typography variant={"h4"}> Please log in with your Slack account to view your records, register for
-                        events, and vote. </Typography>
-                    <Button size={"large"} variant={"contained"} color={"primary"}> Log in</Button>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography variant={"h4"}> Please log in with your Slack account to view your records, register for
+                                events, and vote. </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button size={"large"} variant={"contained"} color={"primary"}> Log in</Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item xs={6}>
                     <img style={styles.mainImage} src={team} alt={"2020 team"}/>
