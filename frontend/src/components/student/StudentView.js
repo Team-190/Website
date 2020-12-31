@@ -1,19 +1,14 @@
 import React from "react";
 import Background from "../background/Background";
-import {
-    Button,
-    Card,
-    CardContent,
-    FormControl,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography
-} from "@material-ui/core";
-import FRCTable from "../utility/FRCTable";
+import {Button, Card, CardContent, Grid, Typography} from "@material-ui/core";
+import EventTable from "../utility/EventTable";
 import HoursTable from "../utility/HoursTable";
+import RequestHours from "./RequestHours";
+import {withAuth0} from "@auth0/auth0-react";
+import RequestEvent from "./RequestEvent";
+import Requirements from "./Requirements";
+import RequestMeeting from "./RequestMeeting";
+import RequestSupport from "./RequestSupport";
 
 const styles = {
     tables: {
@@ -22,49 +17,31 @@ const styles = {
     formControl: {
         width: "100%"
     },
+    heading: {
+        width: "100%"
+    }
 }
 
 class StudentView extends React.Component {
     tables = [
-        <FRCTable title={"Upcoming Events"} secondaryTitle={"Date"} rows={[]}/>,
+        <EventTable title={"Upcoming Events"} secondaryTitle={"Date"} rows={[]}/>,
+        <EventTable title={"Your Events"} secondaryTitle={"Date"} rows={[]}/>,
         <HoursTable title={"Operations Hours"} rows={[]}/>,
-        <FRCTable title={"Your Events"} secondaryTitle={"Date"} rows={[]}/>,
-        <HoursTable title={"Support Hours"} rows={[]}/>,
-        <FRCTable title={"Votes"} secondaryTitle={"Date"} rows={[]}/>
+        <HoursTable title={"Support Tasks"} rows={[]}/>,
     ];
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            hoursSelected: "",
-            hoursError: true,
-            weekSelected: "",
-            weekError: true
-        }
-        this.handleWeekChange = this.handleWeekChange.bind(this);
-        this.handleHourChange = this.handleHourChange.bind(this);
-    }
-
-    handleHourChange(event) {
-        this.setState({ hoursSelected: event.target.value, hoursError: !event.target.value});
-    }
-
-    handleWeekChange(event) {
-        this.setState({ weekSelected: event.target.value, weekError: !event.target.value});
-    }
 
     generateToolbarContent() {
         return (
-
             <Grid container spacing={4}>
                 <Grid item>
                     <Button variant={"contained"}> Slack </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"}> Hours </Button>
+                    <Button variant={"contained"}> Requests </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"}> Events </Button>
+                    <Button variant={"contained"}> Travel Team Requirements </Button>
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"}> Voting </Button>
@@ -76,15 +53,12 @@ class StudentView extends React.Component {
     generateContent() {
         return (
             <Grid container spacing={3}>
-                <Grid item xs={4} style={{width: "100%"}}>
-                    <Typography variant={"h4"}> Requirements for travel team </Typography>
-                </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                     <Grid container spacing={3} style={styles.tables}>
                         <Grid item xs={12}>
                             <Typography variant={"h4"}> Your data </Typography>
                         </Grid>
-                        {this.tables.map((table,index) => {
+                        {this.tables.map((table, index) => {
                             return (
                                 <Grid item xs={12} key={index}>
                                     <Card>
@@ -95,52 +69,24 @@ class StudentView extends React.Component {
                         })}
                     </Grid>
                 </Grid>
-                <Grid item xs={4}>
-                    <Card>
-                        <CardContent>
-
-                            <Typography variant={"h5"}>
-                                Request approval for hours worked
-                            </Typography>
-                            <form className="CreateChoiceForm" onSubmit={(event) => {
-                                event.preventDefault()
-                            }}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <FormControl style={styles.formControl}>
-                                            <InputLabel id={"studentApprovalHourLabel"}> Type of hours </InputLabel>
-                                            <Select required labelId={"studentApprovalHourLabel"}
-                                                    id={"studentApprovalHourType"} onChange={this.handleHourChange} value={this.state.hoursSelected}>
-                                                <MenuItem value={"Support"}>Support</MenuItem>
-                                                <MenuItem value={"Operations"}>Operations</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControl style={styles.formControl}>
-                                            <TextField required type={"number"} id={"hoursWorked"} placeholder={"0"}/>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <FormControl style={styles.formControl}>
-                                            <InputLabel id={"studentApprovalWeekLabel"}> Week earned </InputLabel>
-                                            <Select required labelId={"studentApprovalWeekLabel"}
-                                                    id={"studentApprovalWeek"} onChange={this.handleWeekChange} value={this.state.weekSelected}>
-                                                {[0, 1, 2, 3, 4, 5, 6].map((value) => {
-                                                    return (
-                                                        <MenuItem key={value} value={value}>Week {value}</MenuItem>
-                                                    )
-                                                })}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Button variant={"contained"} color={"primary"}>Submit</Button>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                        </CardContent>
-                    </Card>
+                <Grid item xs={6}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography variant={"h4"}> Request approvals </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <RequestMeeting/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <RequestHours/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <RequestEvent/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <RequestSupport/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         );
@@ -148,7 +94,7 @@ class StudentView extends React.Component {
 
     componentDidMount() {
         // Post, then
-        // this.tables[0] = <FRCTable title={"Test"} rows={["a","b"]}/>;
+        // this.tables[0] = <EventTable title={"Test"} rows={["a","b"]}/>;
         this.forceUpdate();
     }
 
@@ -159,4 +105,4 @@ class StudentView extends React.Component {
     }
 }
 
-export default StudentView;
+export default withAuth0(StudentView);

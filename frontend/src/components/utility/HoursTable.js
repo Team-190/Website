@@ -4,7 +4,10 @@ import {Table, TableBody, TableCell, TableHead, TableRow} from "@material-ui/cor
 const styles = {
     heading: {
         fontWeight: "bold",
-        width: "10%"
+        width: "50%"
+    },
+    cell: {
+        width: "50%"
     }
 }
 
@@ -24,8 +27,8 @@ class HoursTable extends React.Component {
                         this.props.rows.map((row) => {
                             return (
                                 <TableRow>
-                                    <TableCell> {row.week} </TableCell>
-                                    <TableCell> {row.value} </TableCell>
+                                    <TableCell style={styles.cell}> {row.week} </TableCell>
+                                    <TableCell style={styles.cell}> {row.value} </TableCell>
                                 </TableRow>
                             );
                         })

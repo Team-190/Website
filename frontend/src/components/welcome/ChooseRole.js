@@ -45,8 +45,9 @@ class ChooseRole extends React.Component {
                 }
                 xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
                 const data = {
-                    "role": this.state.role
+                    "role": this.state.selected
                 };
+                console.log("Request: "+ JSON.stringify(data))
                 xmlhttp.send(JSON.stringify(data));
             });
         }
@@ -81,8 +82,8 @@ class ChooseRole extends React.Component {
                                 onChange={this.handleChange}
                                 value={selected}
                             >
-                                <MenuItem value={"Student"}>Student</MenuItem>
-                                <MenuItem value={"Mentor"}>Mentor</MenuItem>
+                                <MenuItem value={"student"}>Student</MenuItem>
+                                <MenuItem value={"mentor"}>Mentor</MenuItem>
                             </Select>
                             {hasError && <FormHelperText>This is required!</FormHelperText>}
                         </FormControl>
