@@ -13,5 +13,7 @@ jobs:
                 node-version: '14'
             - name: install packages
               run: yarn install
+              working-directory: ./frontend
             - name: build front-end
               run: yarn build
+              working-directory: ./frontend
