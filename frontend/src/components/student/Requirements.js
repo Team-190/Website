@@ -1,8 +1,6 @@
 import React from "react";
 import {Document, Page, pdfjs} from "react-pdf";
-import Background from "../background/Background";
-import {Button, Grid} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Grid} from "@material-ui/core";
 import StudentBackground from "./StudentBackground";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;

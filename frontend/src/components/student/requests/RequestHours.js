@@ -1,13 +1,5 @@
 import React from "react";
-import {
-    Button,
-    Card,
-    CardContent,
-    FormControl,
-    Grid,
-    TextField,
-    Typography
-} from "@material-ui/core";
+import {Button, Card, CardContent, FormControl, Grid, TextField, Typography} from "@material-ui/core";
 import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 
@@ -20,22 +12,16 @@ const styles = {
 }
 
 
-class RequestEvent extends React.Component {
+class RequestHours extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            eventTypeSelected: "",
-            eventTypeError: true,
             dateSelected: new Date(),
             dateError: true
         }
-        this.handleEventTypeChange = this.handleEventTypeChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
     }
 
-    handleEventTypeChange(event) {
-        this.setState({eventTypeSelected: event.target.value, eventTypeError: !event.target.value});
-    }
 
     handleDateChange(date) {
         this.setState({dateSelected: date, weekError: !date});
@@ -46,7 +32,7 @@ class RequestEvent extends React.Component {
             <Card>
                 <CardContent>
                     <Typography variant={"h5"}>
-                        Request approval for support task
+                        Request approval for hours worked
                     </Typography>
                     <form onSubmit={(event) => {
                         event.preventDefault()
@@ -54,7 +40,7 @@ class RequestEvent extends React.Component {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <FormControl style={styles.formControl}>
-                                    <TextField required label="What did you do" className="TextEntry" multiline={true}/>
+                                    <TextField required type={"number"} id={"hoursWorked"} placeholder={"0 hours"}/>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
@@ -85,4 +71,4 @@ class RequestEvent extends React.Component {
     }
 }
 
-export default withAuth0(RequestEvent);
+export default withAuth0(RequestHours);

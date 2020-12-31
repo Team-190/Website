@@ -4,10 +4,10 @@ import {Table, TableCell, TableHead, TableRow} from "@material-ui/core";
 const styles = {
     heading: {
         fontWeight: "bold",
-        width:"33%",
+        width: "33%",
     },
     cell: {
-        width:"33%"
+        width: "33%"
     }
 }
 

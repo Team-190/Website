@@ -47,14 +47,14 @@ class ChooseRole extends React.Component {
                 const data = {
                     "role": this.state.selected
                 };
-                console.log("Request: "+ JSON.stringify(data))
+                console.log("Request: " + JSON.stringify(data))
                 xmlhttp.send(JSON.stringify(data));
             });
         }
     }
 
     handleChange(event) {
-        this.setState({ selected: event.target.value, hasError: !event.target.value});
+        this.setState({selected: event.target.value, hasError: !event.target.value});
     }
 
     generateToolbarContent() {

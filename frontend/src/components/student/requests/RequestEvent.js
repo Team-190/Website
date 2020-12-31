@@ -37,7 +37,6 @@ class RequestEvent extends React.Component {
 
     handleEventTypeChange(event) {
         this.setState({eventSelected: event.target.value});
-        console.log(this.state.eventSelected === "Other");
     }
 
     handleDateChange(date) {

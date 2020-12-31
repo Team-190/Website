@@ -21,29 +21,29 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  return (
-    <div className="App">
-      <ThemeProvider theme={theme}>
-          <CssBaseline/>
-          <HashRouter>
-              <Switch>
-                  <Route path={"/student"}>
-                      <StudentView/>
-                  </Route>
-                  <Route path={"/choose"}>
-                      <ChooseRole/>
-                  </Route>
-                  <Route path={"/requirements"}>
-                      <Requirements/>
-                  </Route>
-                  <Route path={"/"}>
-                      <Welcome/>
-                  </Route>
-              </Switch>
-          </HashRouter>
-      </ThemeProvider>
-    </div>
-  );
+    return (
+        <div className="App">
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <HashRouter>
+                    <Switch>
+                        <Route path={"/student"}>
+                            <StudentView/>
+                        </Route>
+                        <Route path={"/choose"}>
+                            <ChooseRole/>
+                        </Route>
+                        <Route path={"/requirements"}>
+                            <Requirements/>
+                        </Route>
+                        <Route path={"/"}>
+                            <Welcome/>
+                        </Route>
+                    </Switch>
+                </HashRouter>
+            </ThemeProvider>
+        </div>
+    );
 }
 
 export default App;

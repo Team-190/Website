@@ -8,7 +8,7 @@ const styles = {
     },
     content: {
         marginTop: 80,
-        padding:"1%"
+        padding: "1%"
     },
     teamName: {
         float: "left",
