@@ -18,13 +18,12 @@ class Welcome extends React.Component {
         if (isAuthenticated) {
             this.handleLogin();
         } else {
-            console.log("No authentication.")
+            console.log("No authentication.");
         }
     }
 
 
     handleLogin() {
-        console.log("handleLogin");
         const {getAccessTokenWithPopup} = this.props.auth0;
         getAccessTokenWithPopup({audience: "team190", scopes: "openid profile email"}).then((token) => {
             const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/login";
@@ -33,7 +32,22 @@ class Welcome extends React.Component {
             xmlhttp.responseType = "json";
             xmlhttp.onloadend = () => {
                 console.log("Response: " + JSON.stringify(xmlhttp.response));
-                // 
+                console.log(xmlhttp.status);
+                if (xmlhttp.status === 201) {
+                    // Must choose role
+                } else if (xmlhttp.status === 200) {
+                    // Redirect to role-respective page
+                    let role = JSON.parse(xmlhttp.response.body)["role"];
+                    if (role === "ubermentor") {
+                        // redirect to /ubermentor
+                    } else {
+                        // redirect to /student
+                        window.location.href = "#/student";
+                    }
+
+                } else {
+                    console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
+                }
             }
             xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
             xmlhttp.send();
