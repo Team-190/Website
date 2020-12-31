@@ -7,7 +7,8 @@ const styles = {
         justifyContent: "space-between"
     },
     content: {
-        marginTop: 80
+        marginTop: 80,
+        padding:"1%"
     },
     teamName: {
         float: "left",
