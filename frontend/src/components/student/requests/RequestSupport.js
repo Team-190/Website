@@ -50,7 +50,7 @@ class RequestSupport extends React.Component {
         const {dateSelected} = this.state;
 
         getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
-            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request/support";
+            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request";
             let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
             xmlhttp.open("POST", api_url, true);
             xmlhttp.responseType = "json";
@@ -70,7 +70,8 @@ class RequestSupport extends React.Component {
 
             const data = {
                 date: mm + '/' + dd + '/' + yyyy,
-                description: this.state.description
+                requestType: "support",
+                data: `{description: ${this.state.description}}`
             }
             console.log("Request: " + JSON.stringify(data));
             xmlhttp.send(JSON.stringify(data));

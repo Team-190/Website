@@ -51,7 +51,7 @@ class RequestHours extends React.Component {
         const {dateSelected} = this.state;
 
         getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
-            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request/hours";
+            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request";
             let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
             xmlhttp.open("POST", api_url, true);
             xmlhttp.responseType = "json";
@@ -71,7 +71,8 @@ class RequestHours extends React.Component {
 
             const data = {
                 date: mm + '/' + dd + '/' + yyyy,
-                hours: this.state.hours
+                requestType: "hours",
+                data: `{hours: ${this.state.hours}}`
             }
             console.log("Request: " + JSON.stringify(data));
             xmlhttp.send(JSON.stringify(data));

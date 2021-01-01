@@ -41,9 +41,5 @@ functions:
     handler: handler/handler.login
   choose:
     handler: handler/handler.assign_role
-  requestMeeting:
-    handler: handler/student_handler.request_meeting
-  requestHours:
-    handler: handler/student_handler.request_hours
-  requestSupport:
-    handler: handler/student_handler.request_support
+  request:
+    handler: handler/student_handler.request

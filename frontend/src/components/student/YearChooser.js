@@ -22,7 +22,7 @@ class YearChooser extends React.Component {
 
     generateYears() {
         //todo real years
-        return [2020].map((value) => {
+        return [2021].map((value) => {
             return (
                 <MenuItem value={value} key={value}>{value}</MenuItem>
             );
