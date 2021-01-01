@@ -4,6 +4,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 
 import {withAuth0} from "@auth0/auth0-react";
+import RequestDialog from "./RequestDialog";
 
 const styles = {
     formControl: {
@@ -12,25 +13,68 @@ const styles = {
 }
 
 
-class RequestEvent extends React.Component {
+class RequestSupport extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            eventTypeSelected: "",
-            eventTypeError: true,
+            description: "",
             dateSelected: new Date(),
-            dateError: true
+            dateError: true,
+            dialogOpen: false,
+            response: ""
         }
-        this.handleEventTypeChange = this.handleEventTypeChange.bind(this);
+        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 
-    handleEventTypeChange(event) {
-        this.setState({eventTypeSelected: event.target.value, eventTypeError: !event.target.value});
+    handleOpenDialog() {
+        this.setState({dialogOpen: true});
+    }
+
+    handleCloseDialog() {
+        this.setState({dialogOpen: false});
+    }
+    handleDescriptionChange(event) {
+        this.setState({description: event.target.value});
     }
 
     handleDateChange(date) {
         this.setState({dateSelected: date, weekError: !date});
+    }
+
+    handleClick() {
+        let {getAccessTokenSilently} = this.props.auth0;
+        const {dateSelected} = this.state;
+
+        getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
+            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request/support";
+            let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", api_url, true);
+            xmlhttp.responseType = "json";
+            xmlhttp.onloadend = () => {
+                console.log("Response: " + JSON.stringify(xmlhttp.response));
+                if (xmlhttp.status === 200) {
+                    this.setState({response: xmlhttp.response["message"]});
+                    this.handleOpenDialog();
+                } else {
+                    console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
+                }
+            }
+            xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+            let dd = String(dateSelected.getDate()).padStart(2, '0');
+            let mm = String(dateSelected.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy = dateSelected.getFullYear();
+
+            const data = {
+                date: mm + '/' + dd + '/' + yyyy,
+                description: this.state.description
+            }
+            console.log("Request: " + JSON.stringify(data));
+            xmlhttp.send(JSON.stringify(data));
+        });
     }
 
     render() {
@@ -40,13 +84,15 @@ class RequestEvent extends React.Component {
                     <Typography variant={"h5"}>
                         Request approval for support task
                     </Typography>
+                    <RequestDialog open={this.state.dialogOpen} onClose={this.handleCloseDialog} title={this.state.response}/>
                     <form onSubmit={(event) => {
                         event.preventDefault()
                     }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <FormControl style={styles.formControl}>
-                                    <TextField required label="What did you do" className="TextEntry" multiline={true}/>
+                                    <TextField required label="What did you do" className="TextEntry" multiline={true}
+                                               onChange={this.handleDescriptionChange}/>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
@@ -67,7 +113,7 @@ class RequestEvent extends React.Component {
                                 </MuiPickersUtilsProvider>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button variant={"contained"} color={"primary"}>Submit</Button>
+                                <Button variant={"contained"} color={"primary"} onClick={this.handleClick}>Submit</Button>
                             </Grid>
                         </Grid>
                     </form>
@@ -77,4 +123,4 @@ class RequestEvent extends React.Component {
     }
 }
 
-export default withAuth0(RequestEvent);
+export default withAuth0(RequestSupport);

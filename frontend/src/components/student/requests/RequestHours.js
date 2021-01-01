@@ -4,6 +4,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 
 import {withAuth0} from "@auth0/auth0-react";
+import RequestDialog from "./RequestDialog";
 
 const styles = {
     formControl: {
@@ -18,13 +19,24 @@ class RequestHours extends React.Component {
         this.state = {
             dateSelected: new Date(),
             dateError: true,
-            hours: 0
+            hours: 0,
+            dialogOpen: false,
+            response: ""
         }
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleHoursChange = this.handleHoursChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 
+    handleOpenDialog() {
+        this.setState({dialogOpen: true});
+    }
+
+    handleCloseDialog() {
+        this.setState({dialogOpen: false});
+    }
 
     handleDateChange(date) {
         this.setState({dateSelected: date, weekError: !date});
@@ -46,6 +58,8 @@ class RequestHours extends React.Component {
             xmlhttp.onloadend = () => {
                 console.log("Response: " + JSON.stringify(xmlhttp.response));
                 if (xmlhttp.status === 200) {
+                    this.setState({response: xmlhttp.response["message"]});
+                    this.handleOpenDialog();
                 } else {
                     console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
                 }
@@ -71,6 +85,7 @@ class RequestHours extends React.Component {
                     <Typography variant={"h5"}>
                         Request approval for hours worked
                     </Typography>
+                    <RequestDialog open={this.state.dialogOpen} onClose={this.handleCloseDialog} title={this.state.response}/>
                     <form onSubmit={(event) => {
                         event.preventDefault()
                     }}>
