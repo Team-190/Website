@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Grid, Typography} from "@material-ui/core";
 import Background from "../utility/Background";
 import team from "../../resources/images/2k20.png";
-import request from "../utility/LambdaAPI";
+import LambdaAPI from "../utility/LambdaAPI";
 import {withAuth0} from "@auth0/auth0-react";
 
 const styles = {
@@ -57,7 +57,7 @@ class Welcome extends React.Component {
     // }
 
     handleLogin() {
-        const {status, response} = request("GET", "/login", this.props.auth0, null);
+        const {status, response} = LambdaAPI.request("GET", "/login", this.props.auth0, null);
         if (status === 201) {
             // Must choose role
             window.location.href = "#/choose";
