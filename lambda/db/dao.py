@@ -6,13 +6,17 @@ from model.user import User
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+
 class DAO:
     dynamodb = boto3.resource("dynamodb")
 
+    def __init__(self, table_name):
+        self.table = DAO.dynamodb.Table(table_name)
 
-class UserDAO():
+
+class UserDAO(DAO):
     def __init__(self):
-        self.table = DAO.dynamodb.Table('Users')
+        super().__init__("Users")
 
     def get_user(self, email):
         dynamodb_response = self.table.get_item(
@@ -48,3 +52,10 @@ class UserDAO():
         user.role = role
         return user
 
+
+class RequestDAO(DAO):
+    def __init__(self):
+        super().__init__("Requests")
+
+    def send_request(self, request):
+        self.table.put_item(Item=request.to_json())

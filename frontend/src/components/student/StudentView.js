@@ -21,10 +21,11 @@ const styles = {
 
 class StudentView extends React.Component {
     tables = [
-        <EventTable title={"Upcoming Events"} secondaryTitle={"Date"} rows={[]}/>,
-        <EventTable title={"Your Events"} secondaryTitle={"Date"} rows={[]}/>,
-        <HoursTable title={"Operations Hours"} rows={[]}/>,
-        <HoursTable title={"Support Tasks"} rows={[]}/>,
+        <EventTable title={"Upcoming events"} rows={[]}/>,
+        <EventTable title={"Your events"} rows={[]}/>,
+        <EventTable title={"Your meetings"} rows={[]}/>,
+        <HoursTable title={"Operations hours"} rows={[]}/>,
+        <HoursTable title={"Support tasks"} rows={[]}/>,
     ];
 
     generateContent() {
@@ -52,7 +53,7 @@ class StudentView extends React.Component {
                 <Grid item xs={6}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Typography variant={"h4"}> Request approvals </Typography>
+                            <Typography variant={"h4"}> Request approval </Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Approvals/>

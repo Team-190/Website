@@ -17,14 +17,56 @@ class RequestMeeting extends React.Component {
         super(props);
         this.state = {
             dateSelected: new Date(),
-            dateError: true
+            dateError: true,
+            codeWord: ""
         }
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleCodeWordChange = this.handleCodeWordChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
 
     handleDateChange(date) {
         this.setState({dateSelected: date, weekError: !date});
+    }
+
+    handleCodeWordChange(event) {
+        this.setState({codeWord: event.target.value});
+    }
+
+    handleClick() {
+        let {getAccessTokenSilently} = this.props.auth0;
+        const {dateSelected} = this.state;
+        // getAccessTokenSilently = getAccessTokenSilently.bind(dateSelected);
+
+        getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
+            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request/meeting";
+            let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", api_url, true);
+            xmlhttp.responseType = "json";
+            xmlhttp.onloadend = () => {
+                console.log("Response: " + JSON.stringify(xmlhttp.response));
+                if (xmlhttp.status === 200) {
+                } else {
+                    console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
+                }
+            }
+            xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+            let dd = String(dateSelected.getDate()).padStart(2, '0');
+            let mm = String(dateSelected.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy = dateSelected.getFullYear();
+
+            const data = {
+                date: mm + '/' + dd + '/' + yyyy,
+                codeWord: this.state.codeWord
+            }
+            console.log("Request: "+JSON.stringify(data));
+            xmlhttp.send(JSON.stringify(data));
+        });
+    }
+
+    postAfter(token) {
+
     }
 
     render() {
@@ -57,11 +99,11 @@ class RequestMeeting extends React.Component {
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControl style={styles.formControl}>
-                                    <TextField required label={"Code word"}/>
+                                    <TextField required label={"Code word"} onChange={this.handleCodeWordChange}/>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button variant={"contained"} color={"primary"}>Submit</Button>
+                                <Button variant={"contained"} color={"primary"} onClick={this.handleClick}>Submit</Button>
                             </Grid>
                         </Grid>
                     </form>

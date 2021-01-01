@@ -1,4 +1,3 @@
-
 class User:
     def __init__(self, user_dict):
         self.email = user_dict["email"]

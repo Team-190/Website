@@ -17,14 +17,51 @@ class RequestHours extends React.Component {
         super(props);
         this.state = {
             dateSelected: new Date(),
-            dateError: true
+            dateError: true,
+            hours: 0
         }
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleHoursChange = this.handleHoursChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
 
     handleDateChange(date) {
         this.setState({dateSelected: date, weekError: !date});
+    }
+
+    handleHoursChange(event) {
+        this.setState({hours: event.target.value});
+    }
+
+    handleClick() {
+        let {getAccessTokenSilently} = this.props.auth0;
+        const {dateSelected} = this.state;
+
+        getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
+            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request/hours";
+            let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+            xmlhttp.open("POST", api_url, true);
+            xmlhttp.responseType = "json";
+            xmlhttp.onloadend = () => {
+                console.log("Response: " + JSON.stringify(xmlhttp.response));
+                if (xmlhttp.status === 200) {
+                } else {
+                    console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
+                }
+            }
+            xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
+            let dd = String(dateSelected.getDate()).padStart(2, '0');
+            let mm = String(dateSelected.getMonth() + 1).padStart(2, '0'); //January is 0!
+            let yyyy = dateSelected.getFullYear();
+
+            const data = {
+                date: mm + '/' + dd + '/' + yyyy,
+                hours: this.state.hours
+            }
+            console.log("Request: " + JSON.stringify(data));
+            xmlhttp.send(JSON.stringify(data));
+        });
     }
 
     render() {
@@ -40,7 +77,8 @@ class RequestHours extends React.Component {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <FormControl style={styles.formControl}>
-                                    <TextField required type={"number"} id={"hoursWorked"} placeholder={"0 hours"}/>
+                                    <TextField required type={"number"} placeholder={"0 hours"}
+                                               onChange={this.handleHoursChange}/>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
@@ -61,7 +99,7 @@ class RequestHours extends React.Component {
                                 </MuiPickersUtilsProvider>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button variant={"contained"} color={"primary"}>Submit</Button>
+                                <Button variant={"contained"} color={"primary"} onClick={this.handleClick}>Submit</Button>
                             </Grid>
                         </Grid>
                     </form>

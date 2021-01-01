@@ -1,10 +1,7 @@
 import json
-import boto3
 import logging
-import requests
 
 from handler.auth0 import Auth0
-from model.user import User
 from db.dao import UserDAO
 
 
@@ -53,3 +50,4 @@ def assign_role(event, context):
     response = {"statusCode": 200, "body": json.dumps(body)}
     logger.info(body["message"])
     return response
+
