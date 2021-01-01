@@ -5,6 +5,7 @@ import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers
 
 import {withAuth0} from "@auth0/auth0-react";
 import RequestDialog from "./RequestDialog";
+import LambdaAPI from "../../utility/LambdaAPI";
 
 const styles = {
     formControl: {
@@ -47,37 +48,23 @@ class RequestMeeting extends React.Component {
     }
 
     handleClick() {
-        let {getAccessTokenSilently} = this.props.auth0;
         const {dateSelected} = this.state;
-        // getAccessTokenSilently = getAccessTokenSilently.bind(dateSelected);
+        let dd = String(dateSelected.getDate()).padStart(2, '0');
+        let mm = String(dateSelected.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = dateSelected.getFullYear();
+        const data = {
+            date: mm + '/' + dd + '/' + yyyy,
+            requestType: "meeting",
+            data: `{code_word: ${this.state.codeWord}}`
+        }
 
-        getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
-            const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/request";
-            let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-            xmlhttp.open("POST", api_url, true);
-            xmlhttp.responseType = "json";
-            xmlhttp.onloadend = () => {
-                console.log("Response: " + JSON.stringify(xmlhttp.response));
-                if (xmlhttp.status === 200) {
-                    this.setState({response: xmlhttp.response["message"]});
-                    this.handleOpenDialog();
-                } else {
-                    console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
-                }
-            }
-            xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
-            let dd = String(dateSelected.getDate()).padStart(2, '0');
-            let mm = String(dateSelected.getMonth() + 1).padStart(2, '0'); //January is 0!
-            let yyyy = dateSelected.getFullYear();
-
-            const data = {
-                date: mm + '/' + dd + '/' + yyyy,
-                requestType: "meeting",
-                data: `{code_word: ${this.state.codeWord}}`
-            }
-            console.log("Request: " + JSON.stringify(data));
-            xmlhttp.send(JSON.stringify(data));
-        });
+        const {status, response} = LambdaAPI.request("POST", "/request", this.props.auth0, data);
+        if (status === 200) {
+            this.setState({response: response["message"]});
+            this.handleOpenDialog();
+        } else {
+            console.log(`An unexpected code was encountered. ${status}`)
+        }
     }
 
     render() {
@@ -87,7 +74,8 @@ class RequestMeeting extends React.Component {
                     <Typography variant={"h5"}>
                         Sign in to weekly meeting
                     </Typography>
-                    <RequestDialog open={this.state.dialogOpen} onClose={this.handleCloseDialog} title={this.state.response}/>
+                    <RequestDialog open={this.state.dialogOpen} onClose={this.handleCloseDialog}
+                                   title={this.state.response}/>
                     <form onSubmit={(event) => {
                         event.preventDefault()
                     }}>
@@ -115,7 +103,8 @@ class RequestMeeting extends React.Component {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button variant={"contained"} color={"primary"} onClick={this.handleClick}>Submit</Button>
+                                <Button variant={"contained"} color={"primary"}
+                                        onClick={this.handleClick}>Submit</Button>
                             </Grid>
                         </Grid>
                     </form>
