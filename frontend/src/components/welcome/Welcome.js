@@ -57,24 +57,27 @@ class Welcome extends React.Component {
     // }
 
     handleLogin() {
-        const {status, response} = LambdaAPI.request("GET", "/login", this.props.auth0, null);
-        if (status === 201) {
-            // Must choose role
-            window.location.href = "#/choose";
-        } else if (status === 200) {
-            // Redirect to role-respective page
-            let role = response["message"];
-            if (role === "ubermentor") {
-                // redirect to /ubermentor
-                window.location.href = "#/uber"
-            } else {
-                // redirect to /student
-                window.location.href = "#/student";
-            }
+        LambdaAPI.request("GET", "/login", this.props.auth0, null).then(tuple => {
+            const response = tuple.response;
+            const status = tuple.status;
+            if (status === 201) {
+                // Must choose role
+                window.location.href = "#/choose";
+            } else if (status === 200) {
+                // Redirect to role-respective page
+                let role = response["message"];
+                if (role === "ubermentor") {
+                    // redirect to /ubermentor
+                    window.location.href = "#/uber"
+                } else {
+                    // redirect to /student
+                    window.location.href = "#/student";
+                }
 
-        } else {
-            console.log(`An unexpected code was encountered. ${status}`)
-        }
+            } else {
+                console.log(`An unexpected code was encountered. ${status}`)
+            }
+        })
     }
 
 

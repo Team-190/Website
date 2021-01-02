@@ -3,23 +3,16 @@ class LambdaAPI {
 
     static request(method, route, auth0, data = null) {
         let {getAccessTokenSilently} = auth0;
-        getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
-            let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-            xmlhttp.open(method, LambdaAPI.api_url_base + route, true);
-            xmlhttp.responseType = "json";
-            xmlhttp.onloadend = () => {
-                console.log("Status: "+ xmlhttp.status+", Response: " + JSON.stringify(xmlhttp.response));
+        return getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
+            let headers = new Headers();
+            headers.append("Authorization", `Bearer ${token}`);
+            let request = new Request(LambdaAPI.api_url_base + route, {method: method, headers: headers, body: method === "POST" ? JSON.stringify(data) : null});
+            return fetch(request).then(response => {
                 return {
-                    status: xmlhttp.status,
-                    response: xmlhttp.response
+                    status: response.status,
+                    response: response.json()
                 }
-            }
-            xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
-            if (method === "POST") {
-                xmlhttp.send(JSON.stringify(data));
-            } else {
-                xmlhttp.send();
-            }
+            });
         });
     }
 }
