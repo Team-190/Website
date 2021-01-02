@@ -2,7 +2,8 @@ import logging
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from model.user import User, Record
+from model.user import User
+from model.record import Record
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
