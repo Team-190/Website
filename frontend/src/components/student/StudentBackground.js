@@ -2,6 +2,7 @@ import React from "react";
 import Background from "../utility/Background";
 import {Button, Grid} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {withAuth0} from "@auth0/auth0-react";
 
 class StudentBackground extends React.Component {
     generateToolbarContent() {
@@ -41,4 +42,4 @@ class StudentBackground extends React.Component {
     }
 }
 
-export default StudentBackground;
+export default withAuth0(StudentBackground);

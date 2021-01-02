@@ -2,6 +2,7 @@ import React from "react";
 import Background from "../utility/Background";
 import {Button, Grid} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {withAuth0} from "@auth0/auth0-react";
 
 class UberBackground extends React.Component {
     generateToolbarContent() {
@@ -39,4 +40,4 @@ class UberBackground extends React.Component {
     }
 }
 
-export default UberBackground;
+export default withAuth0(UberBackground);
