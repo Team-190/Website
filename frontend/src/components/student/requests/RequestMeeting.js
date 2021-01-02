@@ -58,13 +58,16 @@ class RequestMeeting extends React.Component {
             data: `{code_word: ${this.state.codeWord}}`
         }
 
-        const {status, response} = LambdaAPI.POST( "/request", this.props.auth0, data);
-        if (status === 200) {
-            this.setState({response: response["message"]});
-            this.handleOpenDialog();
-        } else {
-            console.log(`An unexpected code was encountered. ${status}`)
-        }
+        LambdaAPI.POST("/request", this.props.auth0, data).then(tuple => {
+            const response = tuple.response;
+            const status = tuple.status;
+            if (status === 200) {
+                this.setState({response: response["message"]});
+                this.handleOpenDialog();
+            } else {
+                console.log(`An unexpected code was encountered. ${status}`)
+            }
+        });
     }
 
     render() {
