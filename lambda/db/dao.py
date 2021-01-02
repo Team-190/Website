@@ -74,4 +74,4 @@ class RecordDAO(DAO):
 
     def get_records_for_user(self, email):
         response = self.table.query(IndexName="email-uuid-index", KeyConditionExpression=Key('email').eq(email))
-        return list(map(lambda item : Record(item), response["Items"]))
+        return list(map(lambda item : Record(item).to_json(), response["Items"]))
