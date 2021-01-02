@@ -54,8 +54,8 @@ class RequestMeeting extends React.Component {
         let yyyy = dateSelected.getFullYear();
         const data = {
             date: mm + '/' + dd + '/' + yyyy,
-            requestType: "meeting",
-            data: `{code_word: ${this.state.codeWord}}`
+            requestType: "Meeting",
+            data: this.state.codeWord
         }
 
         LambdaAPI.POST("/request", this.props.auth0, data).then(tuple => {

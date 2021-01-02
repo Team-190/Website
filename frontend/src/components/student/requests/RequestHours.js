@@ -54,8 +54,8 @@ class RequestHours extends React.Component {
         let yyyy = dateSelected.getFullYear();
         const data = {
             date: mm + '/' + dd + '/' + yyyy,
-            requestType: "hours",
-            data: `{hours: ${this.state.hours}}`
+            requestType: "Hours",
+            data: this.state.hours
         }
 
         LambdaAPI.POST("/request", this.props.auth0, data).then(tuple => {
