@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 
 class StudentBackground extends React.Component {
     generateToolbarContent() {
+        const  {logout} = this.props.auth0;
         return (
             <Grid container spacing={4}>
                 <Grid item>
@@ -25,6 +26,9 @@ class StudentBackground extends React.Component {
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"}> Voting </Button>
+                </Grid>
+                <Grid item>
+                    <Button onClick={() => logout({ returnTo: window.location.origin }) }> Logout </Button>
                 </Grid>
             </Grid>
         );

@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 
 class UberBackground extends React.Component {
     generateToolbarContent() {
+        const  {logout} = this.props.auth0;
         return (
             <Grid container spacing={4}>
                 <Grid item>
@@ -23,6 +24,9 @@ class UberBackground extends React.Component {
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"}> Manage Site </Button>
+                </Grid>
+                <Grid item>
+                    <Button onClick={() => logout({ returnTo: window.location.origin }) }> Logout </Button>
                 </Grid>
             </Grid>
         );
