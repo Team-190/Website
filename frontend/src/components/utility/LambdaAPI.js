@@ -11,10 +11,12 @@ class LambdaAPI {
                 body: method === "POST" ? JSON.stringify(data) : null
             });
             return fetch(request).then(response => {
-                return {
-                    status: response.status,
-                    response: response.json()
-                }
+                return response.json().then(json => {
+                    return {
+                        status: response.status,
+                        response: json
+                    }
+                });
             });
         });
     }
