@@ -45,3 +45,5 @@ functions:
     handler: handler/student_handler.request
   get_requests:
     handler: handler/uber_handler.get_requests
+  records:
+    handler: handler/record.getRecords
