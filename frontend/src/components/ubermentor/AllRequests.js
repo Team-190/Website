@@ -18,7 +18,7 @@ class AllRequests extends React.Component {
                 {name: "Type", width: "10%", id: "request_type"},
                 {name: "Name", width: "20%", id: "member_name"},
                 {name: "Date", width: "10%", id: "date"},
-                {name: "Data", width: "20%", id: "data"}
+                {name: "Data", width: "60%", id: "data"}
             ],
             order: "asc",
             orderBy: "date"
@@ -35,26 +35,6 @@ class AllRequests extends React.Component {
         });
     }
 
-    generateData(data, type) {
-        let heading = <div/>
-        if (type === "Hours") {
-            heading = <Box fontWeight={"fontWeightBold"}>Hours: </Box>;
-        } else if (type === "Meeting") {
-            heading = <Box fontWeight={"fontWeightBold"}>Code word: </Box>;
-        } else if (type === "Support") {
-            heading = <Box fontWeight={"fontWeightBold"}>Description: </Box>;
-        }
-        return (
-            <Grid container spacing={1}>
-                <Grid item>
-                    {heading}
-                </Grid>
-                <Grid item>
-                    <Box> {data}</Box>
-                </Grid>
-            </Grid>
-        );
-    }
 
     descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
@@ -90,6 +70,27 @@ class AllRequests extends React.Component {
         this.setState({order: isAsc ? 'desc' : 'asc', orderBy: property});
     };
 
+    generateData(data, type) {
+        let heading = <div/>
+        if (type === "Hours") {
+            heading = <Box fontWeight={"fontWeightBold"}>Hours: </Box>;
+        } else if (type === "Meeting") {
+            heading = <Box fontWeight={"fontWeightBold"}>Code word: </Box>;
+        } else if (type === "Support") {
+            heading = <Box fontWeight={"fontWeightBold"}>Description: </Box>;
+        }
+        return (
+            <Grid container spacing={1}>
+                <Grid item>
+                    {heading}
+                </Grid>
+                <Grid item>
+                    <Box> {data}</Box>
+                </Grid>
+            </Grid>
+        );
+    }
+
     render() {
         const {order, orderBy} = this.state;
         return (
@@ -99,15 +100,17 @@ class AllRequests extends React.Component {
                         {this.state.headerCells.map(value => {
                             const {width, name, id} = value;
                             const {order, orderBy} = this.state;
+                            let label = id === "data" ? null : <TableSortLabel
+                                active={orderBy === id}
+                                direction={orderBy === id ? order : 'asc'}
+                                onClick={this.createSortHandler(id)}
+                            >
+                                {name}
+                            </TableSortLabel>;
                             return (
-                                <TableCell width={width} style={styles.heading} sortDirection={orderBy === id ? order : false}>
-                                    <TableSortLabel
-                                        active={orderBy === id}
-                                        direction={orderBy === id ? order : 'asc'}
-                                        onClick={this.createSortHandler(id)}
-                                    >
-                                        {name}
-                                    </TableSortLabel>
+                                <TableCell width={width} style={styles.heading}
+                                           sortDirection={orderBy === id ? order : false}>
+                                    {label}
                                 </TableCell>
                             );
                         })}
