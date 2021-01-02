@@ -58,7 +58,7 @@ class RequestMeeting extends React.Component {
             data: `{code_word: ${this.state.codeWord}}`
         }
 
-        const {status, response} = LambdaAPI.request("POST", "/request", this.props.auth0, data);
+        const {status, response} = LambdaAPI.POST( "/request", this.props.auth0, data);
         if (status === 200) {
             this.setState({response: response["message"]});
             this.handleOpenDialog();

@@ -23,41 +23,8 @@ class Welcome extends React.Component {
         }
     }
 
-
-    // handleLogin() {
-    //     const {getAccessTokenSilently} = this.props.auth0;
-    //     getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
-    //         const api_url = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/login";
-    //         let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-    //         xmlhttp.open("GET", api_url, true);
-    //         xmlhttp.responseType = "json";
-    //         xmlhttp.onloadend = () => {
-    //             console.log("Response: " + JSON.stringify(xmlhttp.response));
-    //             if (xmlhttp.status === 201) {
-    //                 // Must choose role
-    //                 window.location.href = "#/choose";
-    //             } else if (xmlhttp.status === 200) {
-    //                 // Redirect to role-respective page
-    //                 let role = xmlhttp.response["message"];
-    //                 if (role === "ubermentor") {
-    //                     // redirect to /ubermentor
-    //                     window.location.href = "#/uber"
-    //                 } else {
-    //                     // redirect to /student
-    //                     window.location.href = "#/student";
-    //                 }
-    //
-    //             } else {
-    //                 console.log(`An unexpected code was encountered. ${xmlhttp.status}`)
-    //             }
-    //         }
-    //         xmlhttp.setRequestHeader("Authorization", `Bearer ${token}`);
-    //         xmlhttp.send();
-    //     });
-    // }
-
     handleLogin() {
-        LambdaAPI.request("GET", "/login", this.props.auth0, null).then(tuple => {
+        LambdaAPI.GET("/login", this.props.auth0).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
             if (status === 201) {
@@ -73,7 +40,6 @@ class Welcome extends React.Component {
                     // redirect to /student
                     window.location.href = "#/student";
                 }
-
             } else {
                 console.log(`An unexpected code was encountered. ${status}`)
             }
