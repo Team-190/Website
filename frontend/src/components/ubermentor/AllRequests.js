@@ -68,7 +68,7 @@ class AllRequests extends React.Component {
                                 <TableCell>{value["date"]}</TableCell>
                                 <TableCell>{this.generateData(value["data"], value["request_type"])}</TableCell>
                             </TableRow>
-                        )
+                        );
                     })}
                 </TableBody>
             </Table>

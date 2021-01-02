@@ -27,7 +27,7 @@ class UberBackground extends React.Component {
                     <Button variant={"contained"}> Manage Site </Button>
                 </Grid>
                 <Grid item>
-                    <Button onClick={() => logout({ returnTo: window.location.origin }) }> Logout </Button>
+                    <Button variant={"contained"} onClick={() => logout({ returnTo: window.location.origin }) }> Logout </Button>
                 </Grid>
             </Grid>
         );
