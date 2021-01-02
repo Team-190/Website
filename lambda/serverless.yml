@@ -43,3 +43,5 @@ functions:
     handler: handler/handler.assign_role
   request:
     handler: handler/student_handler.request
+  records:
+    handler: handler/record.getRecords

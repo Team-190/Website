@@ -1,7 +1,8 @@
 import logging
 import boto3
+from boto3.dynamodb.conditions import Key
 
-from model.user import User
+from model.user import User, Record
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -59,3 +60,14 @@ class RequestDAO(DAO):
 
     def send_request(self, request):
         self.table.put_item(Item=request.to_json())
+
+class RecordDAO(DAO):
+    def __init__(self):
+        super().__init__("Records")
+
+    def get_records_for_user(self, email):
+        response = self.table.query(IndexName="email-uuid-index", KeyConditionExpression=Key('email').eq(email))
+        return map(lambda item : Record(item), response["Items"])
+
+    def send_request(self, record):
+        self.table.put_item(Item=record.to_json())
