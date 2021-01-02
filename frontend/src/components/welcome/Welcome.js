@@ -15,8 +15,11 @@ const styles = {
 class Welcome extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {isAuthenticated} = this.props.auth0;
+        const {isAuthenticated, getAccessTokenWithPopup} = this.props.auth0;
         if (isAuthenticated) {
+            getAccessTokenWithPopup({audience: "team190", scopes: "openid profile email"}).then((token) => {
+
+            });
             this.handleLogin();
         } else {
             console.log("No authentication.");
