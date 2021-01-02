@@ -74,6 +74,3 @@ class RecordDAO(DAO):
     def get_records_for_user(self, email):
         response = self.table.query(IndexName="email-uuid-index", KeyConditionExpression=Key('email').eq(email))
         return map(lambda item : Record(item), response["Items"])
-
-    def send_request(self, record):
-        self.table.put_item(Item=record.to_json())
