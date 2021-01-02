@@ -20,15 +20,25 @@ const styles = {
 }
 
 class StudentView extends React.Component {
-    tables = [
-        <EventTable title={"Upcoming events"} rows={[]}/>,
-        <EventTable title={"Your events"} rows={[]}/>,
-        <EventTable title={"Your meetings"} rows={[]}/>,
-        <HoursTable title={"Operations hours"} rows={[]}/>,
-        <HoursTable title={"Support tasks"} rows={[]}/>,
-    ];
+    constructor(props) {
+        super(props);
+        this.state = {
+            tables: [
+                <EventTable title={"Upcoming events"} rows={[]}/>,
+                <EventTable title={"Your events"} rows={[]}/>,
+                <EventTable title={"Your meetings"} rows={[]}/>,
+                <HoursTable title={"Operations hours"} rows={[]}/>,
+                <HoursTable title={"Support tasks"} rows={[]}/>,
+            ]
+        }
+    }
+
+    componentDidMount() {
+        // Post, then update this.state.tables
+    }
 
     generateContent() {
+        const {tables} = this.state;
         return (
             <Grid container spacing={3}>
                 <Grid item xs={6}>
@@ -39,7 +49,7 @@ class StudentView extends React.Component {
                         <Grid item xs={2}>
                             <YearChooser/>
                         </Grid>
-                        {this.tables.map((table, index) => {
+                        {tables.map((table, index) => {
                             return (
                                 <Grid item xs={12} key={index}>
                                     <Card>
@@ -62,12 +72,6 @@ class StudentView extends React.Component {
                 </Grid>
             </Grid>
         );
-    }
-
-    componentDidMount() {
-        // Post, then
-        // this.tables[0] = <EventTable title={"Test"} rows={["a","b"]}/>;
-        this.forceUpdate();
     }
 
     render() {

@@ -1,6 +1,6 @@
 class LambdaAPI {
     static request(method, route, auth0, data = null) {
-        const api_url_base = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production/";
+        const api_url_base = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production";
         let {getAccessTokenSilently} = auth0;
         return getAccessTokenSilently({audience: "team190", scopes: "openid profile email"}).then((token) => {
             let headers = new Headers();

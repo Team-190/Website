@@ -10,6 +10,7 @@ class Request:
         return {
             "uuid": self.uuid,
             "email": self.user.email,
+            "member_name": self.user.name,
             "date": self.date,
             "request_type": self.type,
             "data": self.data

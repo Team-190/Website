@@ -1,5 +1,6 @@
 import logging
 import json
+
 from db.dao import RequestDAO
 from handler.auth0 import Auth0
 
@@ -8,6 +9,7 @@ logger.setLevel(logging.INFO)
 
 
 def get_requests(event, context):
+
     # ping auth0 API with token
     logger.info(f"event: {event}")
     token = event["headers"]["authorization"]

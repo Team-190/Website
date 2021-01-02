@@ -59,3 +59,10 @@ class RequestDAO(DAO):
 
     def send_request(self, request):
         self.table.put_item(Item=request.to_json())
+
+    def get_all_requests(self):
+        try:
+            return self.table.scan()["Items"]
+        except KeyError:
+            return {}
+
