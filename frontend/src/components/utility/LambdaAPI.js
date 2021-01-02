@@ -28,6 +28,22 @@ class LambdaAPI {
     static POST(route, auth0, data) {
         return LambdaAPI.request("POST", route, auth0, data);
     }
+
+    static RETURN_ROLE(auth0, callback) {
+        this.GET("/login", auth0).then(tuple => {
+            const response = tuple.response;
+            const status = tuple.status;
+            if (status === 201) {
+                // Must choose role
+                return callback("undefined");
+            } else if (status === 200) {
+                // Redirect to role-respective page
+                return callback(response["message"]);
+            } else {
+                console.log(`An unexpected code was encountered. ${status}`)
+            }
+        })
+    }
 }
 
 export default LambdaAPI;

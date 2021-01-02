@@ -6,6 +6,7 @@ import {withAuth0} from "@auth0/auth0-react";
 import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
 import YearChooser from "./YearChooser";
+import LambdaAPI from "../utility/LambdaAPI";
 
 const styles = {
     tables: {
@@ -34,7 +35,11 @@ class StudentView extends React.Component {
     }
 
     componentDidMount() {
-        // Post, then update this.state.tables
+        LambdaAPI.RETURN_ROLE(this.props.auth0, (role) => {
+            if (role === "undefined") {
+                window.location.href = "#/welcome";
+            }
+        });
     }
 
     generateContent() {
