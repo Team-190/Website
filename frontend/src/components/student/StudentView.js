@@ -1,11 +1,10 @@
 import React from "react";
-import {Card, CardContent, Grid, Typography} from "@material-ui/core";
-import EventTable from "../utility/EventTable";
-import HoursTable from "../utility/HoursTable";
+import {Grid, Typography} from "@material-ui/core";
 import {withAuth0} from "@auth0/auth0-react";
 import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
 import YearChooser from "./YearChooser";
+import RecordTables from "./RecordTables";
 import LambdaAPI from "../utility/LambdaAPI";
 
 const styles = {
@@ -21,18 +20,6 @@ const styles = {
 }
 
 class StudentView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tables: [
-                <EventTable title={"Upcoming events"} rows={[]}/>,
-                <EventTable title={"Your events"} rows={[]}/>,
-                <EventTable title={"Your meetings"} rows={[]}/>,
-                <HoursTable title={"Operations hours"} rows={[]}/>,
-                <HoursTable title={"Support tasks"} rows={[]}/>,
-            ]
-        }
-    }
 
     componentDidMount() {
         LambdaAPI.RETURN_ROLE(this.props.auth0, (role) => {
@@ -43,7 +30,6 @@ class StudentView extends React.Component {
     }
 
     generateContent() {
-        const {tables} = this.state;
         return (
             <Grid container spacing={3}>
                 <Grid item xs={6}>
@@ -54,15 +40,7 @@ class StudentView extends React.Component {
                         <Grid item xs={2}>
                             <YearChooser/>
                         </Grid>
-                        {tables.map((table, index) => {
-                            return (
-                                <Grid item xs={12} key={index}>
-                                    <Card>
-                                        <CardContent>{table}</CardContent>
-                                    </Card>
-                                </Grid>
-                            )
-                        })}
+                        <RecordTables/>
                     </Grid>
                 </Grid>
                 <Grid item xs={6}>
