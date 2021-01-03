@@ -10,7 +10,7 @@ class StudentBackground extends React.Component {
         return (
             <Grid container spacing={4}>
                 <Grid item>
-                    <Link to={"/student"}>
+                    <Link to={"/"}>
                         <Button variant={"contained"}> Home </Button>
                     </Link>
                 </Grid>

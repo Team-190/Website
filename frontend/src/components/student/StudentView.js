@@ -40,7 +40,9 @@ class StudentView extends React.Component {
                         <Grid item xs={2}>
                             <YearChooser/>
                         </Grid>
-                        <RecordTables/>
+                        <Grid item>
+                            <RecordTables/>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item xs={6}>
