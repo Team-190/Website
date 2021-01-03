@@ -1,10 +1,10 @@
 class Record:
-    def __init__(self, record_dict):
-        self.uuid = record_dict["uuid"]
-        self.type = record_dict["record_type"]
-        self.email = record_dict["email"]
-        self.date = record_dict["date"]
-        self.data = record_dict["data"]
+    def __init__(self, uuid, record_type, email, date, data):
+        self.uuid = uuid
+        self.type = record_type
+        self.email = email
+        self.date = date
+        self.data = data
 
     def to_json(self):
         return {

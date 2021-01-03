@@ -10,7 +10,7 @@ class UberBackground extends React.Component {
         return (
             <Grid container spacing={4}>
                 <Grid item>
-                    <Link to={"/uber"}>
+                    <Link to={"/"}>
                         <Button variant={"contained"}> Home </Button>
                     </Link>
                 </Grid>

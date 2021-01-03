@@ -41,6 +41,7 @@ class AllRequests extends React.Component {
             order: "asc",
             orderBy: "date"
         }
+        this.handleConfirm = this.handleConfirm.bind(this);
     }
 
     componentDidMount() {
@@ -86,25 +87,17 @@ class AllRequests extends React.Component {
         this.setState({order: isAsc ? 'desc' : 'asc', orderBy: property});
     };
 
-    generateData(data, type) {
-        let heading = <div/>
-        if (type === "Hours") {
-            heading = <Box fontWeight={"fontWeightBold"}>Hours: </Box>;
-        } else if (type === "Meeting") {
-            heading = <Box fontWeight={"fontWeightBold"}>Code word: </Box>;
-        } else if (type === "Support") {
-            heading = <Box fontWeight={"fontWeightBold"}>Description: </Box>;
-        }
-        return (
-            <Grid container spacing={1}>
-                <Grid item>
-                    {heading}
-                </Grid>
-                <Grid item>
-                    <Box> {data}</Box>
-                </Grid>
-            </Grid>
-        );
+    handleConfirm() {
+        const data = {
+            requests: this.state.requests
+        };
+        LambdaAPI.POST("/request/confirm", this.props.auth0, data).then(tuple => {
+            const response = tuple.response;
+            const status = tuple.status;
+            if (status === 200) {
+                this.setState({requests: response.requests});
+            }
+        });
     }
 
     assignStatus(status, uuid) {
@@ -178,6 +171,27 @@ class AllRequests extends React.Component {
         );
     }
 
+    generateData(data, type) {
+        let heading = <div/>
+        if (type === "Hours") {
+            heading = <Box fontWeight={"fontWeightBold"}>Hours: </Box>;
+        } else if (type === "Meeting") {
+            heading = <Box fontWeight={"fontWeightBold"}>Code word: </Box>;
+        } else if (type === "Support") {
+            heading = <Box fontWeight={"fontWeightBold"}>Description: </Box>;
+        }
+        return (
+            <Grid container spacing={1}>
+                <Grid item>
+                    {heading}
+                </Grid>
+                <Grid item>
+                    <Box> {data}</Box>
+                </Grid>
+            </Grid>
+        );
+    }
+
     render() {
 
         return (
@@ -193,7 +207,7 @@ class AllRequests extends React.Component {
                     </TableBody>
                 </Table>
                 <div style={styles.confirm}>
-                    <Button variant={"contained"} color={"primary"}> Confirm</Button>
+                    <Button variant={"contained"} color={"primary"} onClick={this.handleConfirm}> Confirm</Button>
                 </div>
             </div>
         );

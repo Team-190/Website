@@ -81,6 +81,13 @@ class RequestDAO(DAO):
         except KeyError:
             return {}
 
+    def delete_request(self, uuid):
+        self.table.delete_item(
+            Key={
+                "uuid": uuid
+            }
+        )
+
 
 class RecordDAO(DAO):
     def __init__(self):
@@ -88,4 +95,10 @@ class RecordDAO(DAO):
 
     def get_records_for_user(self, email):
         response = self.table.query(IndexName="email-uuid-index", KeyConditionExpression=Key('email').eq(email))
-        return [Record(item).to_json() for item in response["Items"]]
+        try:
+            return response["Items"]
+        except KeyError:
+            return []
+
+    def add_record(self, record):
+        self.table.put_item(Item=record.to_json())
