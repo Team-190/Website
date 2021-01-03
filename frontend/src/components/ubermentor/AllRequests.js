@@ -3,6 +3,11 @@ import LambdaAPI from "../utility/LambdaAPI";
 import {
     Box,
     Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     Grid,
     IconButton,
     Table,
@@ -39,9 +44,12 @@ class AllRequests extends React.Component {
                 {name: "Approve?", width: "10%", id: "buttons", ignore: true}
             ],
             order: "asc",
-            orderBy: "date"
+            orderBy: "date",
+            dialogOpen: false
         }
         this.handleConfirm = this.handleConfirm.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.handleDoubleCheck = this.handleDoubleCheck.bind(this);
     }
 
     componentDidMount() {
@@ -88,6 +96,14 @@ class AllRequests extends React.Component {
     };
 
     handleConfirm() {
+        this.setState({dialogOpen: true});
+    }
+
+    handleCancel() {
+        this.setState({dialogOpen: false});
+    }
+
+    handleDoubleCheck() {
         const data = {
             requests: this.state.requests
         };
@@ -98,6 +114,7 @@ class AllRequests extends React.Component {
                 this.setState({requests: response.requests});
             }
         });
+        this.setState({dialogOpen: false});
     }
 
     assignStatus(status, uuid) {
@@ -192,10 +209,30 @@ class AllRequests extends React.Component {
         );
     }
 
-    render() {
 
+    render() {
+        const {dialogOpen} = this.state;
         return (
             <div>
+                <Dialog
+                    open={dialogOpen}
+                    onClose={this.handleCancel}
+                >
+                    <DialogTitle> Confirm the selected approvals/disapprovals? </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            You will have to edit the student(s)' records in order to reverse this action.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant={"contained"} onClick={this.handleCancel} color="primary">
+                            Cancel
+                        </Button>
+                        <Button variant={"contained"} onClick={this.handleDoubleCheck} color="primary" autoFocus>
+                            Confirm
+                        </Button>
+                    </DialogActions>
+                </Dialog>
                 <Table>
                     <TableHead>
                         <TableRow>
