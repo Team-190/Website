@@ -20,7 +20,7 @@ def request(event, context):
     # Add request to DynamoDB
     requestDAO = RequestDAO()
     data = json.loads(event["body"])
-    requestDAO.send_request(Request(str(uuid()), data["requestType"], user, data["date"], data["data"]))
+    requestDAO.send_request(Request(str(uuid()), data["requestType"], user.email, data["date"], data["data"], data["status"]))
 
     body = {"message": "Request received"}
     response = {"statusCode": 200, "body": json.dumps(body)}

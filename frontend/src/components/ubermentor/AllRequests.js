@@ -1,11 +1,28 @@
 import React from "react";
 import LambdaAPI from "../utility/LambdaAPI";
-import {Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel} from "@material-ui/core";
+import {
+    Box,
+    Button,
+    Grid,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TableSortLabel
+} from "@material-ui/core";
+
 import {withAuth0} from "@auth0/auth0-react";
+import {CheckCircleOutline, HighlightOffOutlined} from "@material-ui/icons";
 
 const styles = {
     heading: {
         fontWeight: "bold"
+    },
+    confirm: {
+        float: "right",
+        paddingTop: "2%"
     }
 }
 
@@ -15,10 +32,11 @@ class AllRequests extends React.Component {
         this.state = {
             requests: [],
             headerCells: [
-                {name: "Type", width: "10%", id: "request_type"},
-                {name: "Name", width: "20%", id: "member_name"},
-                {name: "Date", width: "10%", id: "date"},
-                {name: "Data", width: "60%", id: "data"}
+                {name: "Type", width: "10%", id: "request_type", ignore: false},
+                {name: "Name", width: "20%", id: "member_name", ignore: false},
+                {name: "Date", width: "10%", id: "date", ignore: false},
+                {name: "Info", width: "50%", id: "data", ignore: true},
+                {name: "Approve?", width: "10%", id: "buttons", ignore: true}
             ],
             order: "asc",
             orderBy: "date"
@@ -34,7 +52,6 @@ class AllRequests extends React.Component {
             }
         });
     }
-
 
     descendingComparator(a, b, orderBy) {
         if (b[orderBy] < a[orderBy]) {
@@ -61,7 +78,6 @@ class AllRequests extends React.Component {
             ? (a, b) => this.descendingComparator(a, b, orderBy)
             : (a, b) => -this.descendingComparator(a, b, orderBy);
     }
-
 
     createSortHandler = (property) => (event) => {
         console.log("handling");
@@ -91,46 +107,95 @@ class AllRequests extends React.Component {
         );
     }
 
-    render() {
-        const {order, orderBy} = this.state;
+    assignStatus(status, uuid) {
+        let {requests} = this.state;
+        for (let i = 0; i < requests.length; i++) {
+            if (requests[i]["uuid"] === uuid) {
+                let tempStatus = requests[i]["status"];
+                if (tempStatus !== "pending") {
+                    status = "pending";
+                }
+                requests[i]["status"] = status;
+                this.setState({requests: requests});
+                break;
+            }
+        }
+    }
+
+    generateTableHead() {
+        const {headerCells} = this.state;
         return (
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        {this.state.headerCells.map(value => {
-                            const {width, name, id} = value;
-                            const {order, orderBy} = this.state;
-                            let label = id === "data" ? null : <TableSortLabel
-                                active={orderBy === id}
-                                direction={orderBy === id ? order : 'asc'}
-                                onClick={this.createSortHandler(id)}
-                            >
-                                {name}
-                            </TableSortLabel>;
-                            return (
-                                <TableCell width={width} style={styles.heading}
-                                           sortDirection={orderBy === id ? order : false}>
-                                    {label}
-                                </TableCell>
-                            );
-                        })}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {
-                        this.stableSort(this.state.requests, this.getComparator(order, orderBy))
-                            .map((value) => {
-                                return (
-                                    <TableRow key={value["uuid"]}>
-                                        <TableCell>{value["request_type"]}</TableCell>
-                                        <TableCell>{value["member_name"]}</TableCell>
-                                        <TableCell>{value["date"]}</TableCell>
-                                        <TableCell>{this.generateData(value["data"], value["request_type"])}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                </TableBody>
-            </Table>
+            headerCells.map(value => {
+                const {width, name, id} = value;
+                const {order, orderBy} = this.state;
+                let label = value.ignore ? name : <TableSortLabel
+                    active={orderBy === id}
+                    direction={orderBy === id ? order : 'asc'}
+                    onClick={this.createSortHandler(id)}
+                >
+                    {name}
+                </TableSortLabel>;
+                return (
+                    <TableCell width={width} style={styles.heading} key={id}
+                               sortDirection={orderBy === id ? order : false}>
+                        {label}
+                    </TableCell>
+                );
+            })
+        );
+    }
+
+    generateTableBody() {
+        const {order, orderBy, requests} = this.state;
+        return (
+            this.stableSort(requests, this.getComparator(order, orderBy))
+                .map((value) => {
+                    const checkStyle = value["status"] === "approved" ? {color: "green"} : {};
+                    const xStyle = value["status"] === "denied" ? {color: "#a83236"} : {};
+                    return (
+                        <TableRow key={value["uuid"]}>
+                            <TableCell>{value["request_type"]}</TableCell>
+                            <TableCell>{value["member_name"]}</TableCell>
+                            <TableCell>{value["date"]}</TableCell>
+                            <TableCell>{this.generateData(value["data"], value["request_type"])}</TableCell>
+                            <TableCell>
+                                <Grid container spacing={1}>
+                                    <Grid item xs={6}>
+                                        <IconButton onClick={() => this.assignStatus("approved", value["uuid"])}>
+                                            <CheckCircleOutline style={checkStyle}/>
+                                        </IconButton>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <IconButton onClick={() => this.assignStatus("denied", value["uuid"])}>
+                                            <HighlightOffOutlined style={xStyle}/>
+                                        </IconButton>
+                                    </Grid>
+                                </Grid>
+                            </TableCell>
+                        </TableRow>
+                    );
+                })
+        );
+    }
+
+    render() {
+
+        return (
+            <div>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            {this.generateTableHead()}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {this.generateTableBody()}
+                    </TableBody>
+                </Table>
+                <div style={styles.confirm}>
+                    <Button variant={"contained"} color={"primary"}> Confirm</Button>
+                </div>
+            </div>
         );
     }
 }

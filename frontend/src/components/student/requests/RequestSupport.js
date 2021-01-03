@@ -56,7 +56,8 @@ class RequestSupport extends React.Component {
         const data = {
             date: mm + '/' + dd + '/' + yyyy,
             requestType: "Support",
-            data: this.state.description
+            data: this.state.description,
+            status: "pending"
         }
         LambdaAPI.POST("/request", this.props.auth0, data).then(tuple => {
             const response = tuple.response;

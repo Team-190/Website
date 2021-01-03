@@ -55,7 +55,8 @@ class RequestMeeting extends React.Component {
         const data = {
             date: mm + '/' + dd + '/' + yyyy,
             requestType: "Meeting",
-            data: this.state.codeWord
+            data: this.state.codeWord,
+            status: "pending"
         }
 
         LambdaAPI.POST("/request", this.props.auth0, data).then(tuple => {

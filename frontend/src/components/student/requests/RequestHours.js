@@ -55,7 +55,8 @@ class RequestHours extends React.Component {
         const data = {
             date: mm + '/' + dd + '/' + yyyy,
             requestType: "Hours",
-            data: this.state.hours
+            data: this.state.hours,
+            status: "pending"
         }
 
         LambdaAPI.POST("/request", this.props.auth0, data).then(tuple => {

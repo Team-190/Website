@@ -9,6 +9,7 @@ import StudentView from "../student/StudentView";
 import ChooseRole from "../welcome/ChooseRole";
 import Requirements from "../student/Requirements";
 import UberView from "../ubermentor/UberView";
+import LoggedOut from "../welcome/LoggedOut";
 
 const theme = createMuiTheme({
     palette: {
@@ -40,6 +41,9 @@ function App() {
                         </Route>
                         <Route path={"/requirements"}>
                             <Requirements/>
+                        </Route>
+                        <Route path={"/loggedOut"}>
+                            <LoggedOut/>
                         </Route>
                         <Route path={"/"}>
                             <Welcome/>

@@ -2,6 +2,7 @@ import logging
 import boto3
 from boto3.dynamodb.conditions import Key
 
+from model.approval_request import Request
 from model.user import User
 from model.record import Record
 
@@ -35,6 +36,12 @@ class UserDAO(DAO):
             # user doesn't exist
             return None
 
+    def get_all_users(self):
+        try:
+            return self.table.scan()["Items"]
+        except KeyError:
+            return {}
+
     def set_role(self, user, role):
         if self.get_user(user.email) is not None:
             # Updating existing user
@@ -64,9 +71,16 @@ class RequestDAO(DAO):
 
     def get_all_requests(self):
         try:
-            return self.table.scan()["Items"]
+            requests = []
+            items = self.table.scan()["Items"]
+            users = {user["email"]: user["member_name"] for user in UserDAO().get_all_users()}
+            for item in items:
+                item["member_name"] = users[item["email"]]
+                requests.append(item)
+            return requests
         except KeyError:
             return {}
+
 
 class RecordDAO(DAO):
     def __init__(self):
@@ -74,4 +88,4 @@ class RecordDAO(DAO):
 
     def get_records_for_user(self, email):
         response = self.table.query(IndexName="email-uuid-index", KeyConditionExpression=Key('email').eq(email))
-        return list(map(lambda item : Record(item).to_json(), response["Items"]))
+        return [Record(item).to_json() for item in response["Items"]]

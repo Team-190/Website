@@ -46,4 +46,4 @@ functions:
   get_requests:
     handler: handler/uber_handler.get_requests
   records:
-    handler: handler/record.getRecords
+    handler: handler/handler.get_records
