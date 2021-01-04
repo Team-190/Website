@@ -1,8 +1,8 @@
 class LambdaAPI {
     static request(method, route, auth0, data = null) {
         const api_url_base = "https://c22onf2w15.execute-api.us-east-1.amazonaws.com/production";
-        let {getAccessTokenWithPopup} = auth0;
-        let request = getAccessTokenWithPopup({audience: "team190", scopes: "openid profile email"})
+        let {getAccessTokenSilently} = auth0;
+        let request = getAccessTokenSilently({audience: "team190", scopes: "openid profile email"})
             .catch(error => {
                 console.log(error.message);
                 window.location.href = "#/loggedOut";
