@@ -36,11 +36,6 @@ class Background extends React.Component {
                 <div style={styles.content}>
                     {this.props.content}
                 </div>
-                <div style={{float:"bottom", display:"block", marginLeft:"auto", marginRight:"auto", paddingBottom:"15px"}}>
-                    <Typography variant={"body1"}>
-                        Copyright 2021. All rights reserved.
-                    </Typography>
-                </div>
             </div>
         );
     }
