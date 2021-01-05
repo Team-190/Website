@@ -23,7 +23,8 @@ const styles = {
         width: "50%"
     },
     cell: {
-        width: "50%"
+        width: "50%",
+        paddingNone: "true"
     },
     formControl: {
         width: "100%"
@@ -149,9 +150,9 @@ class RecordTables extends React.Component {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Event </TableCell>
-                                        <TableCell style={styles.heading}> Type </TableCell>
-                                        <TableCell style={styles.heading}> Date </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Event </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Type </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Date </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -159,17 +160,17 @@ class RecordTables extends React.Component {
                                         this.state.events.map((row, index) => {
                                             return (
                                                 <TableRow key={index}>
-                                                    <TableCell style={styles.cell}> {row.value} </TableCell>
-                                                    <TableCell style={styles.cell}> {row.event_type} </TableCell>
-                                                    <TableCell style={styles.cell}> {row.date} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.value} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.event_type} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.date} </TableCell>
                                                 </TableRow>
                                             );
                                         })
                                     }
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Total </TableCell>
-                                        <TableCell/>
-                                        <TableCell style={styles.heading}>
+                                        <TableCell style={styles.heading} size={"small"}> Total </TableCell>
+                                        <TableCell size={"small"}/>
+                                        <TableCell style={styles.heading} size={"small"}>
                                             {this.state.events.length}
                                         </TableCell>
                                     </TableRow>
@@ -187,8 +188,8 @@ class RecordTables extends React.Component {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Date </TableCell>
-                                        <TableCell style={styles.heading}> Credit </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Date </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Credit </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -196,15 +197,15 @@ class RecordTables extends React.Component {
                                         this.state.meetings.map((row, index) => {
                                             return (
                                                 <TableRow key={index}>
-                                                    <TableCell style={styles.cell}> {row.date} </TableCell>
-                                                    <TableCell> 1 </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.date} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> 1 </TableCell>
                                                 </TableRow>
                                             );
                                         })
                                     }
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Total </TableCell>
-                                        <TableCell style={styles.heading}>
+                                        <TableCell style={styles.heading} size={"small"}> Total </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}>
                                             {this.state.meetings.length}
                                         </TableCell>
                                     </TableRow>
@@ -222,8 +223,8 @@ class RecordTables extends React.Component {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Week </TableCell>
-                                        <TableCell style={styles.heading}> Hours </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Week </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Hours </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -231,15 +232,15 @@ class RecordTables extends React.Component {
                                         this.state.hours.map((row, index) => {
                                             return (
                                                 <TableRow key={index}>
-                                                    <TableCell style={styles.cell}> {row.week} </TableCell>
-                                                    <TableCell style={styles.cell}> {row.hours} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.week} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.hours} </TableCell>
                                                 </TableRow>
                                             );
                                         })
                                     }
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Total </TableCell>
-                                        <TableCell style={styles.heading}>{this.state.totalHours}</TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Total </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}>{this.state.totalHours}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -255,8 +256,8 @@ class RecordTables extends React.Component {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Date </TableCell>
-                                        <TableCell style={styles.heading}> Support task </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Date </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Support task </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -264,16 +265,16 @@ class RecordTables extends React.Component {
                                         this.state.tasks.map((row, index) => {
                                             return (
                                                 <TableRow key={index}>
-                                                    <TableCell style={styles.cell}> {row.date} </TableCell>
-                                                    <TableCell style={styles.cell}> {row.value} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.date} </TableCell>
+                                                    <TableCell style={styles.cell} size={"small"}> {row.value} </TableCell>
                                                 </TableRow>
                                             );
                                         })
                                     }
                                     <TableRow>
-                                        <TableCell style={styles.heading}> Total </TableCell>
+                                        <TableCell style={styles.heading} size={"small"}> Total </TableCell>
                                         <TableCell
-                                            style={styles.heading}>
+                                            style={styles.heading} size={"small"}>
                                             {this.state.tasks.length}
                                         </TableCell>
                                     </TableRow>
