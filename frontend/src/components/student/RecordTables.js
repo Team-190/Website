@@ -82,7 +82,7 @@ class RecordTables extends React.Component {
                     const record = response[i];
                     const type = record["record_type"];
                     const {selectedYear} = this.state;
-                    if (type === "Total Hours" || (type === "Hours" && JSON.parse(record["date"])["year"] === selectedYear) || record["date"].split("/")[2] === selectedYear) {
+                    if (type === "Total Hours" || (type === "Hours" && JSON.parse(record["date"])["year"].toString() === selectedYear) || record["date"].split("/")[2] === selectedYear) {
                         if (type === "Meeting") {
                             meetings.push({
                                 date: record["date"]
