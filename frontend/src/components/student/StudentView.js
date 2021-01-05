@@ -6,18 +6,6 @@ import StudentBackground from "./StudentBackground";
 import RecordTables from "./RecordTables";
 import LambdaAPI from "../utility/LambdaAPI";
 
-const styles = {
-    tables: {
-        padding: "1%"
-    },
-    formControl: {
-        width: "100%"
-    },
-    heading: {
-        width: "100%"
-    }
-}
-
 class StudentView extends React.Component {
 
     componentDidMount() {
