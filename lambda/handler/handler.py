@@ -60,5 +60,10 @@ def get_records(event, context):
     # Add request to DynamoDB
     recordDAO = RecordDAO()
     records = recordDAO.get_records_for_user(user.email)
+    total = 0
+    for record in records:
+        if record["record_type"] == "Hours":
+            total += int(record["data"])
+    records.append({"record_type": "Total Hours", "data": total})
     response = {"statusCode": 200, "body": json.dumps(records)}
     return response

@@ -3,7 +3,6 @@ import {Grid, Typography} from "@material-ui/core";
 import {withAuth0} from "@auth0/auth0-react";
 import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
-import YearChooser from "./YearChooser";
 import RecordTables from "./RecordTables";
 import LambdaAPI from "../utility/LambdaAPI";
 
@@ -33,17 +32,7 @@ class StudentView extends React.Component {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={6}>
-                    <Grid container spacing={3} style={styles.tables}>
-                        <Grid item xs={10}>
-                            <Typography variant={"h4"}> Your data </Typography>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <YearChooser/>
-                        </Grid>
-                        <Grid item>
-                            <RecordTables/>
-                        </Grid>
-                    </Grid>
+                    <RecordTables/>
                 </Grid>
                 <Grid item xs={6}>
                     <Grid container spacing={3}>
