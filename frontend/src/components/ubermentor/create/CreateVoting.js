@@ -1,7 +1,5 @@
 import React from "react";
 import {Button, Card, CardContent, FormControl, Grid, TextField, Typography} from "@material-ui/core";
-import DateFnsUtils from '@date-io/date-fns';
-import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers';
 
 import {withAuth0} from "@auth0/auth0-react";
 import RequestDialog from "./RequestDialog";
