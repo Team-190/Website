@@ -1,9 +1,7 @@
 import React from "react";
 import {Grid, Typography} from "@material-ui/core";
 import {withAuth0} from "@auth0/auth0-react";
-import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
-import RecordTables from "./RecordTables";
 import LambdaAPI from "../utility/LambdaAPI";
 import AllStudentRequests from "../student/AllStudentRequests";
 
