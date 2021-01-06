@@ -18,7 +18,9 @@ class StudentBackground extends React.Component {
                     <Button variant={"contained"}> Slack </Button>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"}> Requests </Button>
+                    <Link to={"/requests"}>
+                        <Button variant={"contained"}> Requests </Button>
+                    </Link>
                 </Grid>
                 <Grid item>
                     <Link to={"/requirements"}>
