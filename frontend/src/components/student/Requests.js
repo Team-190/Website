@@ -5,6 +5,7 @@ import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
 import RecordTables from "./RecordTables";
 import LambdaAPI from "../utility/LambdaAPI";
+import AllStudentRequests from "../student/AllStudentRequests";
 
 class Requests extends React.Component {
 
@@ -19,16 +20,13 @@ class Requests extends React.Component {
     generateContent() {
         return (
             <Grid container spacing={3}>
-                <Grid item xs={6}>
-                    <RecordTables/>
-                </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Typography variant={"h4"}> Request approval </Typography>
+                            <Typography variant={"h4"}> Current Pending Requests </Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <Approvals/>
+                            <AllStudentRequests/>
                         </Grid>
                     </Grid>
                 </Grid>
