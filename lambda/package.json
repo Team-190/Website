@@ -22,5 +22,8 @@
   },
   "devDependencies": {
     "serverless": "^2.17.0"
+  },
+  "resolutions": {
+    "axios": ">=0.21.1"
   }
 }
