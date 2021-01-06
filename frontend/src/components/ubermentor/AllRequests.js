@@ -146,7 +146,7 @@ class AllRequests extends React.Component {
                     {name}
                 </TableSortLabel>;
                 return (
-                    <TableCell width={width} style={styles.heading} key={id}
+                    <TableCell width={width} size={"small"} style={styles.heading} key={id}
                                sortDirection={orderBy === id ? order : false}>
                         {label}
                     </TableCell>
@@ -164,11 +164,11 @@ class AllRequests extends React.Component {
                     const xStyle = value["status"] === "denied" ? {color: "#a83236"} : {};
                     return (
                         <TableRow key={value["uuid"]}>
-                            <TableCell>{value["request_type"]}</TableCell>
-                            <TableCell>{value["member_name"]}</TableCell>
-                            <TableCell>{value["date"]}</TableCell>
-                            <TableCell>{this.generateData(value["data"], value["request_type"])}</TableCell>
-                            <TableCell>
+                            <TableCell size={"small"}>{value["request_type"]}</TableCell>
+                            <TableCell size={"small"}>{value["member_name"]}</TableCell>
+                            <TableCell size={"small"}>{value["date"]}</TableCell>
+                            <TableCell size={"small"}>{this.generateData(value["data"], value["request_type"])}</TableCell>
+                            <TableCell size={"small"}>
                                 <Grid container spacing={1}>
                                     <Grid item xs={6}>
                                         <IconButton onClick={() => this.assignStatus("approved", value["uuid"])}>

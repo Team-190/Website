@@ -4,6 +4,8 @@ import {Grid, Typography} from "@material-ui/core";
 import {withAuth0} from "@auth0/auth0-react";
 import AllRequests from "./AllRequests";
 import LambdaAPI from "../utility/LambdaAPI";
+import CreateEvent from "./create/CreateEvent";
+import Create from "./Create";
 
 class UberView extends React.Component {
 
@@ -32,6 +34,9 @@ class UberView extends React.Component {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Typography variant={"h4"}> Create </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Create/>
                         </Grid>
                     </Grid>
                 </Grid>
