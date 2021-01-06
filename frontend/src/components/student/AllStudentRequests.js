@@ -5,8 +5,6 @@ import {
     Button,
     Dialog,
     DialogActions,
-    DialogContent,
-    DialogContentText,
     DialogTitle,
     Grid,
     IconButton,
@@ -19,7 +17,7 @@ import {
 } from "@material-ui/core";
 
 import {withAuth0} from "@auth0/auth0-react";
-import {CheckCircleOutline, HighlightOffOutlined} from "@material-ui/icons";
+import {HighlightOffOutlined} from "@material-ui/icons";
 
 const styles = {
     heading: {
@@ -160,7 +158,6 @@ class AllStudentRequests extends React.Component {
         return (
             this.stableSort(requests, this.getComparator(order, orderBy))
                 .map((value) => {
-                    const checkStyle = value["status"] === "approved" ? {color: "green"} : {};
                     const xStyle = value["status"] === "denied" ? {color: "#a83236"} : {};
                     return (
                         <TableRow key={value["uuid"]}>
@@ -170,12 +167,7 @@ class AllStudentRequests extends React.Component {
                             <TableCell>{this.generateData(value["data"], value["request_type"])}</TableCell>
                             <TableCell>
                                 <Grid container spacing={1}>
-                                    <Grid item xs={6}>
-                                        <IconButton onClick={() => this.assignStatus("approved", value["uuid"])}>
-                                            <CheckCircleOutline style={checkStyle}/>
-                                        </IconButton>
-                                    </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12}>
                                         <IconButton onClick={() => this.assignStatus("denied", value["uuid"])}>
                                             <HighlightOffOutlined style={xStyle}/>
                                         </IconButton>
@@ -218,12 +210,7 @@ class AllStudentRequests extends React.Component {
                     open={dialogOpen}
                     onClose={this.handleCancel}
                 >
-                    <DialogTitle> Confirm the selected approvals/disapprovals? </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            You will have to edit the student(s)' records in order to reverse this action.
-                        </DialogContentText>
-                    </DialogContent>
+                    <DialogTitle> Confirm the deletion of the selected requests?</DialogTitle>
                     <DialogActions>
                         <Button variant={"contained"} onClick={this.handleCancel} color="primary">
                             Cancel
