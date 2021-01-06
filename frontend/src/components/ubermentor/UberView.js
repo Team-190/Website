@@ -4,7 +4,6 @@ import {Grid, Typography} from "@material-ui/core";
 import {withAuth0} from "@auth0/auth0-react";
 import AllRequests from "./AllRequests";
 import LambdaAPI from "../utility/LambdaAPI";
-import CreateEvent from "./create/CreateEvent";
 import Create from "./Create";
 
 class UberView extends React.Component {
