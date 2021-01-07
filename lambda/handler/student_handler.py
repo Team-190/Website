@@ -35,8 +35,8 @@ def get_pending_requests(event, context):
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()
-    #requests = requestDAO.get_user_requests()
+    requests = requestDAO.get_user_requests(user.email)
 
-    #body = {"requests": requests}
-    #response = {"statusCode": 200, "body": json.dumps(body)}
-    #return response
+    body = {"requests": requests}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
