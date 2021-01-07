@@ -81,6 +81,19 @@ class RequestDAO(DAO):
         except KeyError:
             return {}
 
+    def get_user_requests(self, email):
+        try:
+            requests = []
+            items = self.table.scan()["Items"]
+            users = {user["email"]: user["member_name"] for user in UserDAO().get_all_users()}
+            for item in items:
+                if email == item["email"]:
+                    item["member_name"] = users[item["email"]]
+                    requests.append(item)
+            return requests
+        except KeyError:
+            return {}
+
     def delete_request(self, uuid):
         self.table.delete_item(
             Key={
