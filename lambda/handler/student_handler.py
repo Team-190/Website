@@ -37,6 +37,6 @@ def get_pending_requests(event, context):
     requestDAO = RequestDAO()
     #requests = requestDAO.get_user_requests()
 
-    body = {"requests": requests}
-    response = {"statusCode": 200, "body": json.dumps(body)}
-    return response
+    #body = {"requests": requests}
+    #response = {"statusCode": 200, "body": json.dumps(body)}
+    #return response
