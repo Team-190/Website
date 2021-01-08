@@ -109,4 +109,4 @@ class EventDAO(DAO):
         super().__init__("Events")
 
     def add_event(self, event):
-        self.table.put_item(event.to_json())
+        self.table.put_item(Item=event.to_json())

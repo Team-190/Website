@@ -3,7 +3,7 @@ import json
 
 from db.dao import RequestDAO, RecordDAO, EventDAO
 from handler.auth0 import Auth0
-from model.Event import Event
+from model.event import Event
 from model.record import Record
 
 logger = logging.getLogger()
@@ -65,6 +65,6 @@ def create_event(event, context):
     event = Event(data["event_type"], data["name"], data["location"], json.dumps(data["dates"]))
     eventDAO.add_event(event)
 
-    body = {"message": "success"}
+    body = {"message": "Event created"}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response

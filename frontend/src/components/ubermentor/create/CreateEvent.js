@@ -17,6 +17,8 @@ import {KeyboardDatePicker, KeyboardTimePicker, MuiPickersUtilsProvider,} from '
 
 import {withAuth0} from "@auth0/auth0-react";
 import {AddCircleOutline, RemoveCircleOutline} from "@material-ui/icons";
+import LambdaAPI from "../../utility/LambdaAPI";
+import RequestDialog from "../../student/requests/RequestDialog";
 
 const styles = {
     formControl: {
@@ -38,7 +40,9 @@ class CreateEvent extends React.Component {
             name: "",
             location: "",
             dates: [[new Date(), new Date(), new Date()]],
-            dateSelectors: [0]
+            dateSelectors: [0],
+            dialogOpen: false,
+            response: ""
         }
         this.handleEventTypeChange = this.handleEventTypeChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -48,6 +52,8 @@ class CreateEvent extends React.Component {
         this.addDay = this.addDay.bind(this);
         this.removeDay = this.removeDay.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleOpenDialog = this.handleOpenDialog.bind(this);
+        this.handleCloseDialog = this.handleCloseDialog.bind(this);
     }
 
     handleEventTypeChange(event) {
@@ -72,7 +78,7 @@ class CreateEvent extends React.Component {
         let button = index !== 0 ?
             <IconButton onClick={() => this.removeDay(index)}><RemoveCircleOutline/></IconButton> : null;
         return (
-            <Grid container spacing={3} key={index}>
+            <Grid container spacing={3} key={index} style={{paddingTop: "10px"}}>
                 <Grid item xs={12}>
                     <Typography variant={"h6"} style={{display: 'inline-block'}}>Day {index}</Typography>
                     {button}
@@ -144,6 +150,14 @@ class CreateEvent extends React.Component {
         this.setState({dateSelectors: dateSelectors, dates: dates});
     }
 
+    handleOpenDialog() {
+        this.setState({dialogOpen: true});
+    }
+
+    handleCloseDialog() {
+        this.setState({dialogOpen: false});
+    }
+
     handleSubmit() {
         const data = {
             event_type: this.state.eventSelected,
@@ -163,7 +177,16 @@ class CreateEvent extends React.Component {
                 };
             })
         }
-        console.log(data);
+        LambdaAPI.POST("/event/create", this.props.auth0, data).then( tuple => {
+            const response = tuple.response;
+            const status = tuple.status;
+            if (status === 200) {
+                this.setState({response: response["message"]});
+                this.handleOpenDialog();
+            } else {
+                console.log(`An unexpected code was encountered. ${status}`)
+            }
+        })
     }
 
     render() {
@@ -173,6 +196,8 @@ class CreateEvent extends React.Component {
                     <Typography variant={"h5"}>
                         Create new event
                     </Typography>
+                    <RequestDialog open={this.state.dialogOpen} onClose={this.handleCloseDialog}
+                                   title={this.state.response}/>
                     <form onSubmit={(event) => {
                         event.preventDefault()
                     }}>

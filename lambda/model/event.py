@@ -6,5 +6,4 @@ class Event:
         self.dates = dates
 
     def to_json(self):
-        return "{event_type: %s, name: %s, location: %s, dates: %s}" % (
-        self.event_type, self.name, self.location, self.dates)
+        return {"event_type": self.event_type, "name": self.name, "location": self.location, "dates": self.dates}
