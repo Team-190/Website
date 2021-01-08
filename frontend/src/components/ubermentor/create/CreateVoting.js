@@ -7,9 +7,13 @@ import LambdaAPI from "../../utility/LambdaAPI";
 import {AddCircleOutline, RemoveCircleOutline} from "@material-ui/icons";
 
 const styles = {
-    formControl: {
-        width: "80%"
+    formControl:{
+        width: "90%"
     },
+
+    formControlRest: {
+        width: "83%"
+    }
 };
 
 class CreateVoting extends React.Component {
@@ -55,13 +59,11 @@ class CreateVoting extends React.Component {
                     <Typography variant={"h6"}>Choice {index+1}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl style={styles.formControl}>
+                    <FormControl style={(index !== 0 ? styles.formControlRest : styles.formControl)}>
                         <TextField required label="Enter the choice." className="TextEntry" multiline={true} value={this.state.choices[index]}
                                    onChange={(event) => this.handleChoicesChange(event, index)}/>
                     </FormControl>
-                    <IconButton onClick={() => this.removeChoice(index)}>
-                        <RemoveCircleOutline/>
-                    </IconButton>
+                    {(index !== 0 ? <IconButton onClick={() => this.removeChoice(index)}><RemoveCircleOutline/></IconButton> : null)}
                 </Grid>
             </Grid>
         );
