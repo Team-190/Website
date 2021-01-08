@@ -75,12 +75,9 @@ class CreateVoting extends React.Component {
     }
 
     removeChoice(index){
-        console.log(index);
         let {choiceSelectors, choices} = this.state;
-        console.log(choices);
         choiceSelectors.splice(index, 1);
         choices.splice(index, 1);
-        console.log(choices);
         this.setState({choiceSelectors: choiceSelectors, choices: choices});
     }
 
