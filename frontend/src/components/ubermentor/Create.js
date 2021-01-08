@@ -9,7 +9,7 @@ class Create extends React.Component {
         super(props);
         this.state = {
             tab: 0
-        }
+        };
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -25,8 +25,7 @@ class Create extends React.Component {
                     onChange={this.handleChange}
                     indicatorColor="primary"
                     textColor="primary"
-                    centered
-                >
+                    centered>
                     <Tab label="Event"/>
                     <Tab label="Voting"/>
                 </Tabs>

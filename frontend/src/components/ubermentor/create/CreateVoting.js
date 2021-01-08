@@ -42,8 +42,7 @@ class CreateVoting extends React.Component {
         this.setState({description: event.target.value});
     }
 
-    handleChoicesChange(event, index){
-        console.log(index + " changed");
+    handleChoicesChange(event, index) {
         let {choices} = this.state;
         choices[index] = event.target.value;
         this.setState({choices: choices});
