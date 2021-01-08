@@ -2,7 +2,6 @@ import React from "react";
 import {Paper, Tab, Tabs} from "@material-ui/core";
 import TabPanel from "../utility/TabPanel";
 import CreateEvent from "./create/CreateEvent";
-import CreatePoll from "./create/CreatePoll";
 import CreateVoting from "./create/CreateVoting";
 
 class Create extends React.Component {
@@ -29,12 +28,10 @@ class Create extends React.Component {
                     centered
                 >
                     <Tab label="Event"/>
-                    <Tab label="Poll"/>
                     <Tab label="Voting"/>
                 </Tabs>
                 <TabPanel value={this.state.tab} index={0} content={<CreateEvent/>}/>
-                <TabPanel value={this.state.tab} index={1} content={<CreatePoll/>}/>
-                <TabPanel value={this.state.tab} index={2} content={<CreateVoting/>}/>
+                <TabPanel value={this.state.tab} index={1} content={<CreateVoting/>}/>
             </Paper>
         )
     }
