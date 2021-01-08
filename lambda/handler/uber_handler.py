@@ -1,8 +1,9 @@
 import logging
 import json
 
-from db.dao import RequestDAO, RecordDAO
+from db.dao import RequestDAO, RecordDAO, EventDAO
 from handler.auth0 import Auth0
+from model.Event import Event
 from model.record import Record
 
 logger = logging.getLogger()
@@ -48,5 +49,22 @@ def confirm_requests(event, context):
 
     requests = requestDAO.get_all_requests()
     body = {"requests": requests}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
+
+def create_event(event, context):
+    # ping auth0 API with token
+    logger.info(f"event: {event}")
+    token = event["headers"]["authorization"]
+    auth0 = Auth0()
+    user = auth0.get_user(token)
+
+    # Add request to DynamoDB
+    eventDAO = EventDAO()
+    data = json.loads(event["body"])
+    event = Event(data["event_type"], data["name"], data["location"], json.dumps(data["dates"]))
+    eventDAO.add_event(event)
+
+    body = {"message": "success"}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response

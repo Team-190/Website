@@ -2,7 +2,7 @@ import logging
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from model.approval_request import Request
+from model.request import Request
 from model.user import User
 from model.record import Record
 
@@ -102,3 +102,11 @@ class RecordDAO(DAO):
 
     def add_record(self, record):
         self.table.put_item(Item=record.to_json())
+
+
+class EventDAO(DAO):
+    def __init__(self):
+        super().__init__("Events")
+
+    def add_event(self, event):
+        self.table.put_item(event.to_json())
