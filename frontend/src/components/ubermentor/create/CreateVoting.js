@@ -1,10 +1,11 @@
 import React from "react";
-import {Button, Card, CardContent, FormControl, Grid, IconButton, TextField, Typography} from "@material-ui/core";
+import {Button, Card, CardContent, Checkbox, FormControl, FormGroup, FormHelperText, FormLabel, Grid, IconButton, TextField, Typography} from "@material-ui/core";
 
 import {withAuth0} from "@auth0/auth0-react";
 import RequestDialog from "./RequestDialog";
 import LambdaAPI from "../../utility/LambdaAPI";
 import {AddCircleOutline, RemoveCircleOutline} from "@material-ui/icons";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = {
     formControl:{
@@ -23,7 +24,8 @@ class CreateVoting extends React.Component {
             description: "",
             response: "",
             choices: [""],
-            choiceSelectors: [0]
+            choiceSelectors: [0],
+            audience: []
         };
 
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
@@ -32,6 +34,8 @@ class CreateVoting extends React.Component {
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
         this.handleChoicesChange = this.handleChoicesChange.bind(this);
         this.addChoice = this.addChoice.bind(this);
+        this.handleStudentClick = this.handleStudentClick.bind(this);
+        this.handleMentorClick = this.handleMentorClick.bind(this);
     }
 
     handleOpenDialog() {
@@ -76,7 +80,7 @@ class CreateVoting extends React.Component {
         this.setState({choiceSelectors: choiceSelectors, choices: choices});
     }
 
-    removeChoice(index){
+    removeChoice(index) {
         let {choiceSelectors, choices} = this.state;
         choiceSelectors.splice(index, 1);
         choices.splice(index, 1);
@@ -87,8 +91,33 @@ class CreateVoting extends React.Component {
     handleClick() {
         const data = {
             description: this.state.description,
-            choices: this.state.choices
+            choices: this.state.choices,
+            audience: this.state.audience
         };
+        let {audience, description, choices} = this.state;
+        if(audience.length === 0){
+            alert("You must select at least one audience (student, mentor, or both).");
+            return;
+        }
+        if(description === ""){
+            alert("The name of the poll must not be empty.");
+            return;
+        }
+        let empty = false;
+        choices.forEach((v) => {
+            if(v === ""){
+                empty = true;
+            }
+        });
+        if(empty){
+            alert("One of the choices is empty.");
+            return;
+        }
+
+        if(description === ""){
+            alert("The name of the poll must not be empty");
+            return;
+        }
 
         console.log(data);
 
@@ -105,7 +134,46 @@ class CreateVoting extends React.Component {
         });
     }
 
+    handleStudentClick(event) {
+        let checked = event.target.checked;
+        let {audience} = this.state;
+        if(checked){
+            audience.push("student");
+            console.log("student added")
+        }
+        else{
+            const ind = audience.indexOf("student");
+            if(ind > -1)
+                audience.splice(ind, 1);
+            console.log("student removed")
+        }
+        this.setState({audience: audience});
+        console.log(audience);
+
+    }
+
+    handleMentorClick(event){
+        let checked = event.target.checked;
+        let {audience} = this.state;
+        if(checked){
+            audience.push("mentor");
+            console.log("mentor added")
+        }
+        else{
+            const ind = audience.indexOf("mentor");
+            if(ind > -1)
+                audience.splice(ind, 1);
+            console.log("mentor removed")
+        }
+        this.setState({audience: audience});
+        console.log(audience);
+
+    }
+
+
     render() {
+        let {audience} = this.state;
+        const error = audience.filter((v) => v).length === 0;
         return (
             <Card>
                 <CardContent>
@@ -123,6 +191,25 @@ class CreateVoting extends React.Component {
                                     <TextField required label="Name of the poll" className="TextEntry" multiline={true}
                                                onChange={this.handleDescriptionChange}/>
                                 </FormControl>
+                            </Grid>
+                            <Grid item xs={12} alignItems="center">
+                                <Grid container justify="center">
+                                    <FormControl required error={error} component="fieldset">
+                                        <FormLabel classname="label" component="legend">Select at least one</FormLabel>
+                                        <FormGroup row>
+                                            <FormControlLabel
+                                                control={<Checkbox name="checkedA" />}
+                                                label="Student"
+                                                onChange={this.handleStudentClick}
+                                            />
+                                            <FormControlLabel
+                                                control={<Checkbox name="checkedA" />}
+                                                label="Mentor"
+                                                onChange={this.handleMentorClick}
+                                            />
+                                        </FormGroup>
+                                    </FormControl>
+                                </Grid>
                             </Grid>
                             {this.state.choiceSelectors.map((item, index) => {return this.generateChoiceSelector(index)})}
                             <Grid item xs={12}>
