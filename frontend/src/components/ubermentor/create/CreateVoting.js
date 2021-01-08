@@ -56,7 +56,7 @@ class CreateVoting extends React.Component {
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl style={styles.formControl}>
-                        <TextField required label="Enter the choice." className="TextEntry" multiline={true} placeholder={this.state.choices[index]}
+                        <TextField required label="Enter the choice." className="TextEntry" multiline={true} value={this.state.choices[index]}
                                    onChange={(event) => this.handleChoicesChange(event, index)}/>
                     </FormControl>
                     <IconButton onClick={() => this.removeChoice(index)}>
