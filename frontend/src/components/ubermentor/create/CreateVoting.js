@@ -192,6 +192,9 @@ class CreateVoting extends React.Component {
                                                onChange={this.handleDescriptionChange}/>
                                 </FormControl>
                             </Grid>
+                            <Grid item xs={12}>
+                                Choose the audience for the poll (students, mentors, or both).
+                            </Grid>
                             <Grid item xs={12} alignItems="center">
                                 <Grid container justify="center">
                                     <FormControl required error={error} component="fieldset">
