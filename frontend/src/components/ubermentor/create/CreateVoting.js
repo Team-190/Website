@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card, CardContent, Checkbox, FormControl, FormGroup, FormHelperText, FormLabel, Grid, IconButton, TextField, Typography} from "@material-ui/core";
+import {Button, Card, CardContent, Checkbox, FormControl, FormGroup, FormLabel, Grid, IconButton, TextField, Typography} from "@material-ui/core";
 
 import {withAuth0} from "@auth0/auth0-react";
 import RequestDialog from "./RequestDialog";
