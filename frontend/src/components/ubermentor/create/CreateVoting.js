@@ -4,11 +4,11 @@ import {Button, Card, CardContent, FormControl, Grid, IconButton, TextField, Typ
 import {withAuth0} from "@auth0/auth0-react";
 import RequestDialog from "./RequestDialog";
 import LambdaAPI from "../../utility/LambdaAPI";
-import {AddCircleOutline} from "@material-ui/icons";
+import {AddCircleOutline, RemoveCircleOutline} from "@material-ui/icons";
 
 const styles = {
     formControl: {
-        width: "100%"
+        width: "80%"
     },
 };
 
@@ -56,9 +56,12 @@ class CreateVoting extends React.Component {
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl style={styles.formControl}>
-                        <TextField required label="Enter the choice." className="TextEntry" multiline={true}
+                        <TextField required label="Enter the choice." className="TextEntry" multiline={true} placeholder={this.state.choices[index]}
                                    onChange={(event) => this.handleChoicesChange(event, index)}/>
                     </FormControl>
+                    <IconButton onClick={() => this.removeChoice(index)}>
+                        <RemoveCircleOutline/>
+                    </IconButton>
                 </Grid>
             </Grid>
         );
@@ -68,6 +71,16 @@ class CreateVoting extends React.Component {
         let {choiceSelectors, choices} = this.state;
         choiceSelectors.push(0);
         choices.push("");
+        this.setState({choiceSelectors: choiceSelectors, choices: choices});
+    }
+
+    removeChoice(index){
+        console.log(index);
+        let {choiceSelectors, choices} = this.state;
+        console.log(choices);
+        choiceSelectors.splice(index, 1);
+        choices.splice(index, 1);
+        console.log(choices);
         this.setState({choiceSelectors: choiceSelectors, choices: choices});
     }
 
