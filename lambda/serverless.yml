@@ -49,3 +49,5 @@ functions:
     handler: handler/handler.get_records
   confirm_requests:
     handler: handler/uber_handler.confirm_requests
+  create_poll:
+    handler: handler/uber_handler.create_poll
