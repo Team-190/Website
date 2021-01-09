@@ -51,7 +51,7 @@ class AllStudentRequests extends React.Component {
     }
 
     componentDidMount() {
-        LambdaAPI.GET("/request/getAll", this.props.auth0).then(tuple => {
+        LambdaAPI.GET("/pending_requests", this.props.auth0).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
             if (status === 200) {
@@ -105,7 +105,7 @@ class AllStudentRequests extends React.Component {
         const data = {
             requests: this.state.requests
         };
-        LambdaAPI.POST("/request/confirm", this.props.auth0, data).then(tuple => {
+        LambdaAPI.POST("/pending_requests/delete", this.props.auth0, data).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
             if (status === 200) {
@@ -158,7 +158,7 @@ class AllStudentRequests extends React.Component {
         return (
             this.stableSort(requests, this.getComparator(order, orderBy))
                 .map((value) => {
-                    const xStyle = value["status"] === "denied" ? {color: "#a83236"} : {};
+                    const xStyle = value["status"] === "delete" ? {color: "#a83236"} : {};
                     return (
                         <TableRow key={value["uuid"]}>
                             <TableCell>{value["request_type"]}</TableCell>
@@ -168,7 +168,7 @@ class AllStudentRequests extends React.Component {
                             <TableCell>
                                 <Grid container spacing={1}>
                                     <Grid item xs={12}>
-                                        <IconButton onClick={() => this.assignStatus("denied", value["uuid"])}>
+                                        <IconButton onClick={() => this.assignStatus("delete", value["uuid"])}>
                                             <HighlightOffOutlined style={xStyle}/>
                                         </IconButton>
                                     </Grid>
