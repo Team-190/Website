@@ -1,9 +1,10 @@
 import logging
 import json
 
-from db.dao import RequestDAO, RecordDAO
+from db.dao import RequestDAO, RecordDAO, VotingDAO
 from handler.auth0 import Auth0
 from model.record import Record
+from model.poll import Poll
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -48,5 +49,20 @@ def confirm_requests(event, context):
 
     requests = requestDAO.get_all_requests()
     body = {"requests": requests}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
+
+
+def create_poll(event, context):
+    # ping auth0 API with token
+    logger.info(f"event: {event}")
+
+    # Add request to DynamoDB
+    votingDAO = VotingDAO()
+    data = json.loads(event["body"])
+    votingDAO.send_request(
+        Poll(data["description"], data["choices"], data["audience"]))
+
+    body = {"message": "Request received"}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
