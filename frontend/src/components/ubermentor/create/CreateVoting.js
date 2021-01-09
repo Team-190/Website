@@ -1,15 +1,20 @@
 import React from "react";
-import {Button, Card, CardContent, FormControl, Grid, IconButton, TextField, Typography} from "@material-ui/core";
+import {Button, Card, CardContent, Checkbox, FormControl, FormGroup, Grid, IconButton, TextField, Typography} from "@material-ui/core";
 
 import {withAuth0} from "@auth0/auth0-react";
 import RequestDialog from "./RequestDialog";
 import LambdaAPI from "../../utility/LambdaAPI";
 import {AddCircleOutline, RemoveCircleOutline} from "@material-ui/icons";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = {
-    formControl: {
-        width: "80%"
+    formControl:{
+        width: "90%"
     },
+
+    formControlRest: {
+        width: "83%"
+    }
 };
 
 class CreateVoting extends React.Component {
@@ -19,7 +24,13 @@ class CreateVoting extends React.Component {
             description: "",
             response: "",
             choices: [""],
-            choiceSelectors: [0]
+            choiceSelectors: [0],
+            audience: [],
+            audienceHidden: true,
+            descriptionError: false,
+            descriptionHelperText: "",
+            choiceErrors: [],
+            choiceErrorMessages: []
         };
 
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
@@ -28,6 +39,8 @@ class CreateVoting extends React.Component {
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
         this.handleChoicesChange = this.handleChoicesChange.bind(this);
         this.addChoice = this.addChoice.bind(this);
+        this.handleStudentClick = this.handleStudentClick.bind(this);
+        this.handleMentorClick = this.handleMentorClick.bind(this);
     }
 
     handleOpenDialog() {
@@ -39,13 +52,15 @@ class CreateVoting extends React.Component {
     }
 
     handleDescriptionChange(event) {
-        this.setState({description: event.target.value});
+        this.setState({description: event.target.value, descriptionError:false, descriptionHelperText:""});
     }
 
     handleChoicesChange(event, index) {
-        let {choices} = this.state;
+        let {choices, choiceErrors, choiceErrorMessages} = this.state;
         choices[index] = event.target.value;
-        this.setState({choices: choices});
+        choiceErrors[index] = false;
+        choiceErrorMessages[index] = "";
+        this.setState({choices: choices, choiceErrors: choiceErrors, choiceErrorMessages: choiceErrorMessages});
     }
 
     generateChoiceSelector(index) {
@@ -55,38 +70,67 @@ class CreateVoting extends React.Component {
                     <Typography variant={"h6"}>Choice {index+1}</Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <FormControl style={styles.formControl}>
+                    <FormControl style={(index !== 0 ? styles.formControlRest : styles.formControl)}>
                         <TextField required label="Enter the choice." className="TextEntry" multiline={true} value={this.state.choices[index]}
-                                   onChange={(event) => this.handleChoicesChange(event, index)}/>
+                                   onChange={(event) => this.handleChoicesChange(event, index)}
+                                   error={this.state.choiceErrors[index]} helperText={this.state.choiceErrorMessages[index]}
+                        />
                     </FormControl>
-                    <IconButton onClick={() => this.removeChoice(index)}>
-                        <RemoveCircleOutline/>
-                    </IconButton>
+                    {(index !== 0 ? <IconButton onClick={() => this.removeChoice(index)}><RemoveCircleOutline/></IconButton> : null)}
                 </Grid>
             </Grid>
         );
     }
 
     addChoice() {
-        let {choiceSelectors, choices} = this.state;
+        let {choiceSelectors, choices, choiceErrors, choiceErrorMessages} = this.state;
         choiceSelectors.push(0);
         choices.push("");
-        this.setState({choiceSelectors: choiceSelectors, choices: choices});
+        choiceErrors.push(false);
+        choiceErrorMessages.push("");
+        this.setState({choiceSelectors: choiceSelectors, choices: choices, choiceErrors: choiceErrors, choiceErrorMessages: choiceErrorMessages});
     }
 
-    removeChoice(index){
-        let {choiceSelectors, choices} = this.state;
+    removeChoice(index) {
+        let {choiceSelectors, choices, choiceErrors, choiceErrorMessages} = this.state;
         choiceSelectors.splice(index, 1);
         choices.splice(index, 1);
-        this.setState({choiceSelectors: choiceSelectors, choices: choices});
+        choiceErrors.splice(index, 1);
+        choiceErrorMessages.splice(index, 1);
+        this.setState({choiceSelectors: choiceSelectors, choices: choices, choiceErrors: choiceErrors, choiceErrorMessages: choiceErrorMessages});
+
     }
 
 
     handleClick() {
         const data = {
             description: this.state.description,
-            choices: this.state.choices
+            choices: this.state.choices,
+            audience: this.state.audience
         };
+        let {audience, description, choices, choiceErrors, choiceErrorMessages} = this.state;
+        if(audience.length === 0){
+            this.setState({audienceHidden: false});
+            return;
+        }
+        if(description.trim() === ""){
+            this.setState({descriptionError: true, descriptionHelperText:"Enter a description"});
+            return;
+        }
+
+        choices.forEach((v, index) => {
+            if(v.trim() === ""){
+                choiceErrors[index] = true;
+                choiceErrorMessages[index] = "Enter a choice.";
+            }
+            else{
+                choiceErrors[index] = false;
+                choiceErrorMessages[index] = "";
+            }
+        });
+        this.setState({choiceErrors: choiceErrors, choiceErrorMessages: choiceErrorMessages});
+        console.log(choiceErrors);
+        if(choiceErrors.some((v) => v===false)) return;
 
         console.log(data);
 
@@ -103,7 +147,46 @@ class CreateVoting extends React.Component {
         });
     }
 
+    handleStudentClick(event) {
+        let checked = event.target.checked;
+        let {audience} = this.state;
+        if(checked){
+            audience.push("student");
+            console.log("student added")
+        }
+        else{
+            const ind = audience.indexOf("student");
+            if(ind > -1)
+                audience.splice(ind, 1);
+            console.log("student removed")
+        }
+        this.setState({audience: audience, audienceHidden:true});
+        console.log(audience);
+
+    }
+
+    handleMentorClick(event){
+        let checked = event.target.checked;
+        let {audience} = this.state;
+        if(checked){
+            audience.push("mentor");
+            console.log("mentor added")
+        }
+        else{
+            const ind = audience.indexOf("mentor");
+            if(ind > -1)
+                audience.splice(ind, 1);
+            console.log("mentor removed")
+        }
+        this.setState({audience: audience, audienceHidden:true});
+        console.log(audience);
+
+    }
+
+
     render() {
+        let {audience} = this.state;
+        const error = audience.filter((v) => v).length === 0;
         return (
             <Card>
                 <CardContent>
@@ -119,8 +202,30 @@ class CreateVoting extends React.Component {
                             <Grid item xs={12}>
                                 <FormControl style={styles.formControl}>
                                     <TextField required label="Name of the poll" className="TextEntry" multiline={true}
-                                               onChange={this.handleDescriptionChange}/>
+                                               onChange={this.handleDescriptionChange} error={this.state.descriptionError} helperText={this.state.descriptionHelperText}/>
                                 </FormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                Choose the audience for the poll (students, mentors, or both).
+                            </Grid>
+                            <Grid item xs={12} alignItems="center">
+                                <Grid container justify="center">
+                                    <FormControl required error={error} component="fieldset">
+                                        <p hidden={this.state.audienceHidden} style={{color:"red"}}>Select at least one</p>
+                                        <FormGroup row>
+                                            <FormControlLabel
+                                                control={<Checkbox name="checkedA" />}
+                                                label="Student"
+                                                onChange={this.handleStudentClick}
+                                            />
+                                            <FormControlLabel
+                                                control={<Checkbox name="checkedA" />}
+                                                label="Mentor"
+                                                onChange={this.handleMentorClick}
+                                            />
+                                        </FormGroup>
+                                    </FormControl>
+                                </Grid>
                             </Grid>
                             {this.state.choiceSelectors.map((item, index) => {return this.generateChoiceSelector(index)})}
                             <Grid item xs={12}>
