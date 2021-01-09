@@ -1,5 +1,7 @@
 # Team 190's new website (WIP)
 
+![CI](https://github.com/Team-190/Website/workflows/CI/badge.svg)
+
 This is Team 190's new website, by Grant Perkins and Kevin O'Brien. Frontend in React.js, backend in Python 3.8. Runs on AWS Lambda and frontend hosted by WPI servers. Database with DynamoDB.
 
 ## Development
