@@ -30,7 +30,8 @@ class CreateVoting extends React.Component {
             descriptionError: false,
             descriptionHelperText: "",
             choiceErrors: [],
-            choiceErrorMessages: []
+            choiceErrorMessages: [],
+            dialogOpen: false
         };
 
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
@@ -129,17 +130,14 @@ class CreateVoting extends React.Component {
             }
         });
         this.setState({choiceErrors: choiceErrors, choiceErrorMessages: choiceErrorMessages});
-        console.log(choiceErrors);
         if(choiceErrors.some((v) => v===true)) return;
 
-        console.log(data);
         LambdaAPI.POST("/voting", this.props.auth0, data).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
             if (status === 200) {
                 this.setState({response: response["message"]});
                 this.handleOpenDialog();
-                console.log(`Successful. ${status}`);
             } else {
                 console.log(`An unexpected code was encountered. ${status}`);
             }
@@ -151,16 +149,13 @@ class CreateVoting extends React.Component {
         let {audience} = this.state;
         if(checked){
             audience.push("student");
-            console.log("student added")
         }
         else{
             const ind = audience.indexOf("student");
             if(ind > -1)
                 audience.splice(ind, 1);
-            console.log("student removed")
         }
         this.setState({audience: audience, audienceHidden:true});
-        console.log(audience);
 
     }
 
@@ -168,18 +163,14 @@ class CreateVoting extends React.Component {
         let checked = event.target.checked;
         let {audience} = this.state;
         if(checked){
-            audience.push("mentor");
-            console.log("mentor added")
+            audience.push("mentor")
         }
         else{
             const ind = audience.indexOf("mentor");
             if(ind > -1)
                 audience.splice(ind, 1);
-            console.log("mentor removed")
         }
         this.setState({audience: audience, audienceHidden:true});
-        console.log(audience);
-
     }
 
 

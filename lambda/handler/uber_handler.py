@@ -1,7 +1,7 @@
 import logging
 import json
 
-from db.dao import RequestDAO, RecordDAO, UserDAO, EventDAO
+from db.dao import RequestDAO, RecordDAO, UserDAO, EventDAO, VotingDAO
 from model.event import Event
 from model.record import Record
 from model.utils import APIGatewayEvent
@@ -77,6 +77,7 @@ def confirm_requests(event, context):
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
 
+
 def create_event(event, context):
     logger.info(f"event: {event}")
     email = APIGatewayEvent(event).email
@@ -97,13 +98,16 @@ def create_event(event, context):
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
 
-def create_poll(event, context):
-    # ping auth0 API with token
-    logger.info(f"event: {event}")
-    token = event["headers"]["authorization"]
-    auth0 = Auth0()
-    user = auth0.get_user(token)
 
+def create_poll(event, context):
+    logger.info(f"event: {event}")
+    email = APIGatewayEvent(event).email
+
+    userDAO = UserDAO()
+    user_role = userDAO.get_user(email).role
+
+    if user_role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
     # Add request to DynamoDB
     votingDAO = VotingDAO()
     data = json.loads(event["body"])
