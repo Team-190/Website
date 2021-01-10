@@ -133,7 +133,6 @@ class CreateVoting extends React.Component {
         if(choiceErrors.some((v) => v===true)) return;
 
         console.log(data);
-        console.log("LAMBDAING")
         LambdaAPI.POST("/voting", this.props.auth0, data).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
