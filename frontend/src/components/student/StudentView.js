@@ -4,17 +4,8 @@ import {withAuth0} from "@auth0/auth0-react";
 import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
 import RecordTables from "./RecordTables";
-import LambdaAPI from "../utility/LambdaAPI";
 
 class StudentView extends React.Component {
-
-    componentDidMount() {
-        LambdaAPI.RETURN_ROLE(this.props.auth0, (role) => {
-            if (role === "undefined") {
-                window.location.href = "#/welcome";
-            }
-        });
-    }
 
     generateContent() {
         return (
