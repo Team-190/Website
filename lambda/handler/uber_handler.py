@@ -16,7 +16,10 @@ def get_requests(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
-    if user.role != "ubermentor":
+    userDAO = UserDAO()
+    userRole = userDAO.get_user(user.email)["role"]
+
+    if userRole != "ubermentor":
         return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
 
     # Add request to DynamoDB
@@ -35,8 +38,12 @@ def get_all_users(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
-    if user.role != "ubermentor":
+    userDAO = UserDAO()
+    userRole = userDAO.get_user(user.email)["role"]
+
+    if userRole != "ubermentor":
         return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
+
 
     userDAO = UserDAO()
 
@@ -54,7 +61,10 @@ def confirm_requests(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
-    if user.role != "ubermentor":
+    userDAO = UserDAO()
+    userRole = userDAO.get_user(user.email)["role"]
+
+    if userRole != "ubermentor":
         return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
 
     # Add request to DynamoDB

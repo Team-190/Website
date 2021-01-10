@@ -62,10 +62,14 @@ def get_records(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
+    userDAO = UserDAO()
+    userRole = userDAO.get_user(user.email)["role"]
+
+
     email = user.email
 
     # If the requesting user has asked for the records of a particular user and is an ubermentor, override the email
-    if event["queryStringParameters"] and event["queryStringParameters"]["email"] and user.role == "ubermentor":
+    if event["queryStringParameters"] and event["queryStringParameters"]["email"] and userRole == "ubermentor":
         email = event["queryStringParameters"]["email"]
     
 
