@@ -56,6 +56,9 @@ def confirm_requests(event, context):
 def create_poll(event, context):
     # ping auth0 API with token
     logger.info(f"event: {event}")
+    token = event["headers"]["authorization"]
+    auth0 = Auth0()
+    user = auth0.get_user(token)
 
     # Add request to DynamoDB
     votingDAO = VotingDAO()
