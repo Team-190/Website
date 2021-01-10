@@ -51,3 +51,5 @@ functions:
     handler: handler/uber_handler.confirm_requests
   get_users:
     handler: handler/uber_handler.get_all_users
+  create_event:
+    handler: handler/uber_handler.create_event

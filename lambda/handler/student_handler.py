@@ -2,7 +2,7 @@ import logging
 import json
 from uuid import uuid1 as uuid
 
-from model.approval_request import Request
+from model.request import Request
 from db.dao import RequestDAO
 from model.utils import APIGatewayEvent
 

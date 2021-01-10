@@ -1,7 +1,8 @@
 import logging
 import json
 
-from db.dao import RequestDAO, RecordDAO, UserDAO
+from db.dao import RequestDAO, RecordDAO, UserDAO, EventDAO
+from model.event import Event
 from model.record import Record
 from model.utils import APIGatewayEvent
 
@@ -72,5 +73,25 @@ def confirm_requests(event, context):
 
     requests = requestDAO.get_all_requests()
     body = {"requests": requests}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
+
+def create_event(event, context):
+    logger.info(f"event: {event}")
+    email = APIGatewayEvent(event).email
+
+    userDAO = UserDAO()
+    user_role = userDAO.get_user(email).role
+
+    if user_role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
+
+    # Add request to DynamoDB
+    eventDAO = EventDAO()
+    data = json.loads(event["body"])
+    event = Event(data["event_type"], data["name"], data["location"], json.dumps(data["dates"]))
+    eventDAO.add_event(event)
+
+    body = {"message": "Event created"}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
