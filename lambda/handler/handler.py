@@ -2,7 +2,7 @@ import json
 import logging
 
 from db.dao import UserDAO, RecordDAO
-from model.utils import Event
+from model.utils import APIGatewayEvent
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -10,7 +10,7 @@ logger.setLevel(logging.INFO)
 
 def login(event, context):
     logger.info(f"event: {event}")
-    email = Event(event).email
+    email = APIGatewayEvent(event).email
 
     # Check to see if in DynamoDB
     userDAO = UserDAO()
@@ -34,7 +34,7 @@ def login(event, context):
 
 def assign_role(event, context):
     logger.info(f"event: {event}")
-    user = Event(event).to_user()
+    user = APIGatewayEvent(event).to_user()
 
     role = json.loads(event["body"])["role"]
 
@@ -53,7 +53,7 @@ def assign_role(event, context):
 
 def get_records(event, context):
     logger.info(f"event: {event}")
-    email = Event(event).email
+    email = APIGatewayEvent(event).email
 
     userDAO = UserDAO()
     userRole = userDAO.get_user(email).role

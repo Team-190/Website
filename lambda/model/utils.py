@@ -1,7 +1,7 @@
 from model.user import User
 
 
-class Event:
+class APIGatewayEvent:
     def __init__(self, event):
         self.email = event["requestContext"]["authorizer"]["jwt"]["claims"]["https://first.wpi.edu/email"]
         self.picture = event["requestContext"]["authorizer"]["jwt"]["claims"]["https://first.wpi.edu/slack_avatar"]

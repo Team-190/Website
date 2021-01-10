@@ -3,7 +3,7 @@ import json
 
 from db.dao import RequestDAO, RecordDAO, UserDAO
 from model.record import Record
-from model.utils import Event
+from model.utils import APIGatewayEvent
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -11,7 +11,7 @@ logger.setLevel(logging.INFO)
 
 def get_requests(event, context):
     logger.info(f"event: {event}")
-    email = Event(event).email
+    email = APIGatewayEvent(event).email
 
     userDAO = UserDAO()
     userRole = userDAO.get_user(email).role
@@ -30,7 +30,7 @@ def get_requests(event, context):
 
 def get_all_users(event, context):
     logger.info(f"event: {event}")
-    email = Event(event).email
+    email = APIGatewayEvent(event).email
 
     userDAO = UserDAO()
     user_role = userDAO.get_user(email).role
@@ -48,7 +48,7 @@ def get_all_users(event, context):
 
 def confirm_requests(event, context):
     logger.info(f"event: {event}")
-    email = Event(event).email
+    email = APIGatewayEvent(event).email
 
     userDAO = UserDAO()
     user_role = userDAO.get_user(email).role

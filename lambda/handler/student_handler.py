@@ -4,7 +4,7 @@ from uuid import uuid1 as uuid
 
 from model.approval_request import Request
 from db.dao import RequestDAO
-from model.utils import Event
+from model.utils import APIGatewayEvent
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -12,7 +12,7 @@ logger.setLevel(logging.INFO)
 
 def request(event, context):
     logger.info(f"event: {event}")
-    email = Event(event).email
+    email = APIGatewayEvent(event).email
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()
