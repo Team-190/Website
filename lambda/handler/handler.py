@@ -57,9 +57,16 @@ def get_records(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
+    email = user.email
+
+    # If the requesting user has asked for the records of a particular user and is an ubermentor, override the email
+    if event["queryStringParameters"] and event["queryStringParameters"]["email"] and user.role == "ubermentor":
+        email = event["queryStringParameters"]["email"]
+    
+
     # Add request to DynamoDB
     recordDAO = RecordDAO()
-    records = recordDAO.get_records_for_user(user.email)
+    records = recordDAO.get_records_for_user(email)
     total = 0
     for record in records:
         if record["record_type"] == "Hours":
