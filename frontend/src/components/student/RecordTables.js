@@ -45,12 +45,18 @@ class RecordTables extends React.Component {
             selectedYear: new Date().getFullYear().toString()
         }
         this.sumHours = this.sumHours.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleYearChange = this.handleYearChange.bind(this);
         this.generateYears = this.generateYears.bind(this);
+        this.handleUserChange = this.handleUserChange.bind(this);
     }
 
-    handleChange(event) {
+    handleYearChange(event) {
         this.setState({selectedYear: event.target.value});
+    }
+
+    handleUserChange(event) {
+        this.setState({selectedUser: event.target.value});
+        this.loadRecordsFromAPI(event.target.value.email);
     }
 
     createYearList() {
@@ -69,8 +75,14 @@ class RecordTables extends React.Component {
         });
     }
 
-    componentDidMount() {
-        LambdaAPI.GET("/records", this.props.auth0).then(tuple => {
+    loadRecordsFromAPI(email) {
+        let url = "/records";
+
+        if (!!email) {
+            url = `/records?email=${email}`
+        }
+
+        LambdaAPI.GET(url, this.props.auth0).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
             if (status === 200) {
@@ -116,6 +128,21 @@ class RecordTables extends React.Component {
         });
     }
 
+    componentDidMount() {
+        // If ubermentor, populate the user dropdown, otherwise just load the current user's data
+        if (this.state.role === "ubermentor") {
+            LambdaAPI.GET("/all_users", this.props.auth0).then(tuple => {
+                const response = tuple.response;
+                const status = tuple.status;
+                if (status === 200) {
+                    this.setState({users: response.users});
+                }
+            })
+        } else {
+            this.loadRecordsFromAPI(null);
+        }
+    }
+
     sumHours() {
         try {
             return this.state.hours.reduce((rowA, rowB) => parseInt(rowA.hours) + parseInt(rowB.hours));
@@ -126,21 +153,36 @@ class RecordTables extends React.Component {
 
     render() {
         const {selectedYear} = this.state;
+        const {users} = this.state;
+        const {selectedUser} = this.state;
         return (
             <Grid container spacing={3}>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                     <Typography variant={"h4"}> Your data </Typography>
                 </Grid>
+                
+                {!!users && 
+                    <Grid item xs={2}>
+                        <FormControl style={styles.formControl}>
+                            <InputLabel id={"userLabel"}> User </InputLabel>
+                            <Select required labelId={"userLabel"}
+                                    id={"user"} onChange={this.handleUserChange}
+                                    value={selectedUser}>
+                                {users}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                }
                 <Grid item xs={2}>
                     <FormControl style={styles.formControl}>
                         <InputLabel id={"studentYearLabel"}> Year </InputLabel>
                         <Select required labelId={"studentYearLabel"}
-                                id={"studentYear"} onChange={this.handleChange}
+                                id={"studentYear"} onChange={this.handleYearChange}
                                 value={selectedYear}>
                             {this.generateYears()}
                         </Select>
                     </FormControl>
-                </Grid>
+                </Grid>                
                 <Grid item xs={12}>
                     <Card>
                         <CardContent>

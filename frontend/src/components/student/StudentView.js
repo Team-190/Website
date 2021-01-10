@@ -12,6 +12,8 @@ class StudentView extends React.Component {
         LambdaAPI.RETURN_ROLE(this.props.auth0, (role) => {
             if (role === "undefined") {
                 window.location.href = "#/welcome";
+            } else {
+                this.setState({role: role});
             }
         });
     }
