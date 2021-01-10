@@ -1,7 +1,7 @@
 import logging
 import json
 
-from db.dao import RequestDAO, RecordDAO
+from db.dao import RequestDAO, RecordDAO, UserDAO
 from handler.auth0 import Auth0
 from model.record import Record
 
@@ -16,6 +16,9 @@ def get_requests(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
+    if user.role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
+
     # Add request to DynamoDB
     requestDAO = RequestDAO()
     requests = requestDAO.get_all_requests()
@@ -25,12 +28,34 @@ def get_requests(event, context):
     return response
 
 
+def get_all_users(event, context):
+    # ping auth0 API with token
+    logger.info(f"event: {event}")
+    token = event["headers"]["authorization"]
+    auth0 = Auth0()
+    user = auth0.get_user(token)
+
+    if user.role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
+
+    userDAO = UserDAO()
+
+    allUsers = userDAO.get_all_users()
+    body = {"users": allUsers}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
+
+
+
 def confirm_requests(event, context):
     # ping auth0 API with token
     logger.info(f"event: {event}")
     token = event["headers"]["authorization"]
     auth0 = Auth0()
     user = auth0.get_user(token)
+
+    if user.role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()

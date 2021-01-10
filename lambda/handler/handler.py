@@ -41,6 +41,11 @@ def assign_role(event, context):
     auth0 = Auth0()
     user = auth0.get_user(token)
 
+    role = json.loads(event["body"])["role"]
+
+    if role != "student" or role != "mentor":
+         return {"statusCode": 400, "body": "You can only request to be a student or a mentor"}
+
     # Assign role to user in DynamoDB
     userDAO = UserDAO()
     user = userDAO.set_role(user, json.loads(event["body"])["role"])
