@@ -1,21 +1,24 @@
 import logging
 import json
 
-from db.dao import RequestDAO, RecordDAO, EventDAO
-from handler.auth0 import Auth0
+from db.dao import RequestDAO, RecordDAO, UserDAO, EventDAO
 from model.event import Event
 from model.record import Record
+from model.utils import APIGatewayEvent
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
 def get_requests(event, context):
-    # ping auth0 API with token
     logger.info(f"event: {event}")
-    token = event["headers"]["authorization"]
-    auth0 = Auth0()
-    user = auth0.get_user(token)
+    email = APIGatewayEvent(event).email
+
+    userDAO = UserDAO()
+    userRole = userDAO.get_user(email).role
+
+    if userRole != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()
@@ -26,12 +29,33 @@ def get_requests(event, context):
     return response
 
 
-def confirm_requests(event, context):
-    # ping auth0 API with token
+def get_all_users(event, context):
     logger.info(f"event: {event}")
-    token = event["headers"]["authorization"]
-    auth0 = Auth0()
-    user = auth0.get_user(token)
+    email = APIGatewayEvent(event).email
+
+    userDAO = UserDAO()
+    user_role = userDAO.get_user(email).role
+
+    if user_role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
+
+    userDAO = UserDAO()
+
+    all_users = userDAO.get_all_users()
+    body = {"users": all_users}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
+
+
+def confirm_requests(event, context):
+    logger.info(f"event: {event}")
+    email = APIGatewayEvent(event).email
+
+    userDAO = UserDAO()
+    user_role = userDAO.get_user(email).role
+
+    if user_role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()
@@ -53,11 +77,14 @@ def confirm_requests(event, context):
     return response
 
 def create_event(event, context):
-    # ping auth0 API with token
     logger.info(f"event: {event}")
-    token = event["headers"]["authorization"]
-    auth0 = Auth0()
-    user = auth0.get_user(token)
+    email = APIGatewayEvent(event).email
+
+    userDAO = UserDAO()
+    user_role = userDAO.get_user(email).role
+
+    if user_role != "ubermentor":
+        return {"statusCode": 403, "body": "you must be an ubermentor to call this route!!!"}
 
     # Add request to DynamoDB
     eventDAO = EventDAO()
