@@ -114,6 +114,6 @@ def create_poll(event, context):
     votingDAO.send_request(
         Poll(data["description"], data["choices"], data["audience"]))
 
-    body = {"message": "Request received"}
+    body = {"message": "Poll created"}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
