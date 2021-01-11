@@ -5,6 +5,7 @@ from boto3.dynamodb.conditions import Key
 from model.request import Request
 from model.user import User
 from model.record import Record
+from model.poll import Poll
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -110,3 +111,12 @@ class EventDAO(DAO):
 
     def add_event(self, event):
         self.table.put_item(Item=event.to_json())
+
+
+class VotingDAO(DAO):
+    def __init__(self):
+        super().__init__("Voting")
+
+    def send_request(self, request):
+        self.table.put_item(Item=request.to_json())
+
