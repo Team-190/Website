@@ -36,7 +36,7 @@ class AllStudentRequests extends React.Component {
             requests: [],
             headerCells: [
                 {name: "Type", width: "10%", id: "request_type", ignore: false},
-                {name: "Name", width: "20%", id: "member_name", ignore: false},
+                {name: "Name", width: "20%", id: "member_name", ignore: true},
                 {name: "Date", width: "10%", id: "date", ignore: false},
                 {name: "Info", width: "50%", id: "data", ignore: true},
                 {name: "Delete?", width: "10%", id: "buttons", ignore: true}
@@ -53,9 +53,7 @@ class AllStudentRequests extends React.Component {
     componentDidMount() {
         LambdaAPI.GET("/pending_requests", this.props.auth0).then(tuple => {
             const response = tuple.response;
-            console.log(response);
             const status = tuple.status;
-            console.log(status);
             if (status === 200) {
                 this.setState({requests: response.requests});
             }
