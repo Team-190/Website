@@ -132,7 +132,7 @@ class CreateVoting extends React.Component {
         this.setState({choiceErrors: choiceErrors, choiceErrorMessages: choiceErrorMessages});
         if(choiceErrors.some((v) => v===true)) return;
 
-        LambdaAPI.POST("/voting", this.props.auth0, data).then(tuple => {
+        LambdaAPI.POST("/voting/create", this.props.auth0, data).then(tuple => {
             const response = tuple.response;
             const status = tuple.status;
             if (status === 200) {
