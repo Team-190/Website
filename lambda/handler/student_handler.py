@@ -24,26 +24,20 @@ def request(event, context):
     return response
 
 def get_pending_requests(event, context):
-    # ping auth0 API with token
     logger.info(f"event: {event}")
-    token = event["headers"]["authorization"]
-    auth0 = Auth0()
-    user = auth0.get_user(token)
+    email = APIGatewayEvent(event).email
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()
-    requests = requestDAO.get_user_requests(user.email)
+    requests = requestDAO.get_user_requests(email)
 
     body = {"requests": requests}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
 
 def delete_pending_requests(event, context):
-    # ping auth0 API with token
     logger.info(f"event: {event}")
-    token = event["headers"]["authorization"]
-    auth0 = Auth0()
-    user = auth0.get_user(token)
+    email = APIGatewayEvent(event).email
 
     # Add request to DynamoDB
     requestDAO = RequestDAO()
@@ -54,7 +48,7 @@ def delete_pending_requests(event, context):
             logger.info("Removed " + str(req))
             requestDAO.delete_request(req["uuid"])
 
-    requests = requestDAO.get_user_requests(user.email)
+    requests = requestDAO.get_user_requests(email)
 
     body = {"requests": requests}
     response = {"statusCode": 200, "body": json.dumps(body)}

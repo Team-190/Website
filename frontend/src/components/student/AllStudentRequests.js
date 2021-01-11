@@ -53,7 +53,9 @@ class AllStudentRequests extends React.Component {
     componentDidMount() {
         LambdaAPI.GET("/pending_requests", this.props.auth0).then(tuple => {
             const response = tuple.response;
+            console.log(response);
             const status = tuple.status;
+            console.log(status);
             if (status === 200) {
                 this.setState({requests: response.requests});
             }
