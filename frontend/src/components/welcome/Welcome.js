@@ -50,7 +50,7 @@ class Welcome extends React.Component {
                 <Grid item xs={12}>
                     <Typography variant={"h2"} id={"test"}> Welcome to FRC Team 190's website! </Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Typography variant={"h4"}> Please log in with your Slack account to view your records,
