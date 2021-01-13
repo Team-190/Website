@@ -27,7 +27,7 @@ def get_pending_requests(event, context):
     logger.info(f"event: {event}")
     email = APIGatewayEvent(event).email
 
-    # Add request to DynamoDB
+    # Get this user's pending requests
     requestDAO = RequestDAO()
     requests = requestDAO.get_user_requests(email)
 
@@ -39,7 +39,7 @@ def delete_pending_requests(event, context):
     logger.info(f"event: {event}")
     email = APIGatewayEvent(event).email
 
-    # Add request to DynamoDB
+    # Delete the selected requests
     requestDAO = RequestDAO()
     data = json.loads(event["body"])
     requests = data["requests"]
