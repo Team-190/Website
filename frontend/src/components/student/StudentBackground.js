@@ -10,12 +10,12 @@ class StudentBackground extends React.Component {
         return (
             <Grid container spacing={4}>
                 <Grid item>
-                    <Link to={"/"}>
+                    <Link to={"/student"}>
                         <Button variant={"contained"}> Home </Button>
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Button variant={"contained"}> Slack </Button>
+                    <Button variant={"contained"} href={"https://frc190-active.slack.com"} target="_blank"> Slack </Button>
                 </Grid>
                 <Grid item>
                     <Button variant={"contained"}> Requests </Button>

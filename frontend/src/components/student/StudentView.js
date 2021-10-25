@@ -4,6 +4,7 @@ import {withAuth0} from "@auth0/auth0-react";
 import Approvals from "./Approvals";
 import StudentBackground from "./StudentBackground";
 import RecordTables from "./RecordTables";
+import EventSignup from "./EventSignup";
 
 class StudentView extends React.Component {
 
@@ -20,6 +21,12 @@ class StudentView extends React.Component {
                         </Grid>
                         <Grid item xs={12}>
                             <Approvals/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography variant={"h4"}> Event signup </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <EventSignup />
                         </Grid>
                     </Grid>
                 </Grid>
