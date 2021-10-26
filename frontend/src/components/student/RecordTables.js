@@ -84,6 +84,7 @@ class RecordTables extends React.Component {
         if (!!email) {
             url = `/records?email=${email}`
         }
+        console.log("loading")
 
         LambdaAPI.GET(url, this.props.auth0).then(tuple => {
             const response = tuple.response;
@@ -145,6 +146,7 @@ class RecordTables extends React.Component {
                 this.loadRecordsFromAPI(null);
             }
         });
+
 
     }
 
