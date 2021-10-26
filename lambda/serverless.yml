@@ -34,7 +34,7 @@ plugins:
 
 custom:
   pythonRequirements:
-    dockerizePip: non-linux
+    dockerizePip: true
 
 functions:
   login:
@@ -55,3 +55,7 @@ functions:
     handler: handler/uber_handler.get_all_users
   create_event:
     handler: handler/uber_handler.create_event
+  get_pending_requests:
+    handler: handler/student_handler.get_pending_requests
+  delete_pending_requests:
+    handler: handler/student_handler.delete_pending_requests

@@ -22,3 +22,34 @@ def request(event, context):
     body = {"message": "Request received"}
     response = {"statusCode": 200, "body": json.dumps(body)}
     return response
+
+def get_pending_requests(event, context):
+    logger.info(f"event: {event}")
+    email = APIGatewayEvent(event).email
+
+    # Get this user's pending requests
+    requestDAO = RequestDAO()
+    requests = requestDAO.get_user_requests(email)
+
+    body = {"requests": requests}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
+
+def delete_pending_requests(event, context):
+    logger.info(f"event: {event}")
+    email = APIGatewayEvent(event).email
+
+    # Delete the selected requests
+    requestDAO = RequestDAO()
+    data = json.loads(event["body"])
+    requests = data["requests"]
+    for req in requests:
+        if req["status"] != "pending":
+            logger.info("Removed " + str(req))
+            requestDAO.delete_request(req["uuid"])
+
+    requests = requestDAO.get_user_requests(email)
+
+    body = {"requests": requests}
+    response = {"statusCode": 200, "body": json.dumps(body)}
+    return response
